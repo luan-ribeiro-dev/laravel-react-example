@@ -25,6 +25,6 @@ class Invoice extends Model
 
     public function books(): BelongsToMany
     {
-        return $this->belongsToMany(Books::class, 'invoice_book', 'invoice_id', 'book_id');
+        return $this->belongsToMany(Book::class, 'book_invoice', 'invoice_id', 'book_id');
     }
 }

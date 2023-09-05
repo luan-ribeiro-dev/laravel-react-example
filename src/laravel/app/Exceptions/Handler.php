@@ -27,4 +27,22 @@ class Handler extends ExceptionHandler
             //
         });
     }
+
+    /**
+     * Render an exception into an HTTP response.
+     */
+    public function render($request, Throwable $e) 
+    {
+        if ($request->expectsJson()) {
+            if ($e instanceof \Illuminate\Validation\ValidationException) {
+                return response()->json([
+                    'message' => 'The given data was invalid.',
+                    'type' => 'VALIDATION',
+                    'errors' => $e->errors()
+                ], 422);
+            }
+        }
+
+        return parent::render($request, $e);
+    }
 }

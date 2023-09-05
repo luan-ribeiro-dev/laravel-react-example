@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Books extends Model
+class Book extends Model
 {
     use HasFactory;
 
@@ -22,6 +22,6 @@ class Books extends Model
 
     public function invoice()
     {
-        return $this->belongsToMany(Invoice::class, 'invoice_book', 'book_id', 'invoice_id');
+        return $this->belongsToMany(Invoice::class, 'book_invoice', 'book_id', 'invoice_id');
     }
 }
