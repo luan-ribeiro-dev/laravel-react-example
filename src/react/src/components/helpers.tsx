@@ -14,7 +14,7 @@ export function renderValidationFeedback(reduxState: ApiReturn<any>, field: stri
   return null
 }
 
-export const InputValidation = ({reduxState, field, ...props}: any) => {
+export const InputValidation = ({reduxState, field, isTextarea = false, ...props}: any) => {
   const hasErr = hasError(reduxState, field)
   const isValid = !hasErr 
     && reduxState.status === APIConstants.FAILED 
@@ -30,7 +30,10 @@ export const InputValidation = ({reduxState, field, ...props}: any) => {
 
   return (
     <React.Fragment>
-      <input {...props} className={className} />
+      {isTextarea 
+        ? <textarea {...props} className={className} />
+        : <input {...props} className={className} />
+      }
       {renderValidationFeedback(reduxState, field)}
     </React.Fragment>
   )

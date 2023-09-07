@@ -4,7 +4,7 @@ import { getUser } from './api/requests/users'
 import { APIConstants } from './api'
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { RootState } from './api/store/type'
-import { authRoutes, publicRoutes } from './routes';
+import { adminRoutes, publicRoutes } from './routes';
 import { ToastContainer } from 'react-toastify'
 
 function mapStateToProps(state: RootState) {
@@ -32,7 +32,7 @@ const Router = ({getUserState, dispatchGetUser}: Props) => {
       <Routes>
         {getUserState.status === APIConstants.SUCCEEDED && (
           <React.Fragment>
-            {authRoutes.map((route, index) => (
+            {adminRoutes.map((route, index) => (
               <Route key={`route-${index}`} {...route} />
             ))}
             <Route path="*" element={<Navigate to="/dashboard" />} />

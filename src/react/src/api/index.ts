@@ -16,11 +16,13 @@ export enum APIErrors {
   UNKNOWN = "UNKNOWN",
 }
 
+export type APIReset = {reset?: boolean}
+
 type ApiOptions = {
   url: string,
   method: string,
   enableToast?: boolean,
-  data?: Object
+  data?: Object & APIReset,
 }
 
 export type ApiReturn<T> = {
@@ -38,6 +40,22 @@ export type ApiAction = Action & {
   status: APIConstants
   data?: any
   error?: Error
+}
+
+export type ApiPagination = {
+  current_page: number
+  data: any[]
+  first_page_url: string
+  from: number
+  last_page: number
+  last_page_url: string
+  links: any[]
+  next_page_url: string
+  path: string
+  per_page: number
+  prev_page_url: string
+  to: number
+  total: number
 }
 
 export function apiReducer<T>(type?: string): ActionCreator<ApiReturn<T>> {
@@ -68,6 +86,14 @@ export function apiReducer<T>(type?: string): ActionCreator<ApiReturn<T>> {
 
 export default function api(type:string, {url, method, enableToast = false, ...options}: ApiOptions) {
   return async (dispatch: Dispatch) => {
+    if (options.data?.reset) {
+      dispatch({
+        type,
+        status: APIConstants.UNSTARTED
+      })
+      return Promise.resolve()
+    }
+    
     const toastId = enableToast ? toast("Please wait...", {isLoading: true}) : null
 
     dispatch({

@@ -12,12 +12,17 @@ class Book extends Model
     protected $table = 'books';
     protected $fillable = [
         'title',
-        'author',
         'description',
-        'image',
+        'author',
+        'publisher',
+        'published_at',
+        'isbn',
+        'genre',
+        'language',
+        'format',
+        'pages',
         'price',
         'stock',
-        'status',
     ];
 
     public function invoice()
