@@ -4,7 +4,6 @@ import { storeUser } from '../../api/requests/users'
 import { Link } from 'react-router-dom';
 import { RootState } from '../../api/store/type';
 import { InputValidation } from '../helpers';
-import { APIConstants } from '../../api';
 
 function mapStateToProps(state: RootState) {
   return {
@@ -39,7 +38,7 @@ function SignUp({storeUserState, dispatchStoreUser}: Props) {
   }, [submitForm])
 
   useEffect(() => {
-    if (storeUserState.status === APIConstants.SUCCEEDED) {
+    if (storeUserState.succeeded) {
       window.location.href = '/dashboard'
     }
   }, [storeUserState.status])

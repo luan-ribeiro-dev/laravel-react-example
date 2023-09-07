@@ -4,7 +4,7 @@ import { handleError } from "./helpers"
 import axios from "../axios"
 import { toast } from "react-toastify"
 
-export enum APIConstants {
+enum APIConstants {
   UNSTARTED = "UNSTARTED",
   STARTED = "STARTED",
   SUCCEEDED = "SUCCEEDED",
@@ -16,15 +16,21 @@ export enum APIErrors {
   UNKNOWN = "UNKNOWN",
 }
 
-type ApiOptions = {
-  url: string,
-  method: string,
+type ApiOptions<T> = {
+  url?: string,
+  method?: string,
   enableToast?: boolean,
-  data?: Object
+  data?: T | ApiReset,
 }
+
+export type ApiReset = {reset?: boolean}
 
 export type ApiReturn<T> = {
   status: APIConstants
+  unstarted: boolean
+  started: boolean
+  succeeded: boolean
+  failed: boolean
   data?: T,
   error?: {
     type: APIErrors,
@@ -40,22 +46,39 @@ export type ApiAction = Action & {
   error?: Error
 }
 
+export type ApiPagination<T> = {
+  list: T[]
+  meta: {
+    current_page: number
+    last_page: number
+    from: number
+    to: number
+    total: number
+  }
+}
+
 export function apiReducer<T>(type?: string): ActionCreator<ApiReturn<T>> {
-  return (state = {status: APIConstants.UNSTARTED}, action: ApiAction) => {
+  return (state = {status: APIConstants.UNSTARTED, unstarted: true}, action: ApiAction) => {
     if (action.type === type) {
+      const apiStatus = {
+        status: action.status,
+        unstarted: action.status === APIConstants.UNSTARTED,
+        started: action.status === APIConstants.STARTED,
+        succeeded: action.status === APIConstants.SUCCEEDED,
+        failed: action.status === APIConstants.FAILED,
+      }
       switch (action.status) {
         case APIConstants.UNSTARTED:
-          return {status: APIConstants.UNSTARTED}
         case APIConstants.STARTED:
-          return {status: APIConstants.STARTED}
+          return apiStatus
         case APIConstants.SUCCEEDED:
           return {
-            status: APIConstants.SUCCEEDED,
+            ...apiStatus,
             data: action.data
           }
         case APIConstants.FAILED:
           return {
-            status: APIConstants.FAILED,
+            ...apiStatus,
             error: action.error ? handleError(action.error) : new Error("Unknown error")
           }
         default:
@@ -66,8 +89,21 @@ export function apiReducer<T>(type?: string): ActionCreator<ApiReturn<T>> {
   }
 }
 
-export default function api(type:string, {url, method, enableToast = false, ...options}: ApiOptions) {
+export default function api<T>(type:string, {url = '', method = '', enableToast = false, ...options}: ApiOptions<T>) {
   return async (dispatch: Dispatch) => {
+    if (
+      options.data 
+      && typeof options.data == "object" 
+      && 'reset' in options.data 
+      && options.data.reset
+    ) {
+      dispatch({
+        type,
+        status: APIConstants.UNSTARTED
+      })
+      return Promise.resolve()
+    }
+    
     const toastId = enableToast ? toast("Please wait...", {isLoading: true}) : null
 
     dispatch({
