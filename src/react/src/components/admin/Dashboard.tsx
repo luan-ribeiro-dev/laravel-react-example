@@ -1,10 +1,6 @@
-import React, { useEffect } from 'react'
 import { ConnectedProps, connect } from 'react-redux'
 import { logoutUser } from '../../api/requests/users'
 import { RootState } from '../../api/store/type';
-import { APIConstants } from '../../api';
-import Footer from '../shared/Footer';
-import Navbar from '../shared/Navbar';
 import AdminPanel from './AdminPanel';
 
 function mapStateToProps(state: RootState) {

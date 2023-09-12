@@ -23,17 +23,17 @@ class BookRequest extends FormRequest
     {
         return [
             'title' => 'required|string|max:255',
-            'description' => 'string|max:500',
-            'author' => 'string|max:255',
-            'publisher' => 'string|max:255',
-            'published_at' => 'date',
-            'isbn' => 'string|max:13|min:10',
-            'genre' => 'string|max:255',
-            'language' => 'string|max:255',
-            'format' => 'string|max:255',
-            'pages' => 'integer',
+            'description' => 'string|max:500|nullable',
+            'author' => 'string|max:255|nullable',
+            'publisher' => 'string|max:255|nullable',
+            'published_at' => 'date|nullable',
+            'isbn' => 'string|max:13|min:10|nullable',
+            'genre' => 'string|max:255|nullable',
+            'language' => 'string|max:255|nullable',
+            'format' => 'string|max:255|nullable',
+            'pages' => 'integer|min:0|max:99999|nullable',
             'price' => 'required|numeric|min:0.1|max:999999.99',
-            'stock' => 'integer',
+            'stock' => 'integer|min:0|max:99999|nullable',
         ];
     }
 }

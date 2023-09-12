@@ -1,25 +1,31 @@
 import React, { useEffect } from 'react'
 import { ConnectedProps, connect } from 'react-redux'
 import { RootState } from '../../../api/store/type';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import AdminPanel from '../AdminPanel';
-import { Book, getBooks, storeBook } from '../../../api/requests/admin/books';
+import { Book, getBook, getBooks, updateBook } from '../../../api/requests/admin/books';
 import { InputValidation } from '../../helpers';
 import { isNull } from '../../../api/helpers';
 
 function mapStateToProps(state: RootState) {
   return {
-    storeBookState: state.admin.books.storeBook,
+    getBookState: state.admin.books.getBook,
+    updateBookState: state.admin.books.updateBook,
   }
 }
 
-const mapDispatchToProps = {dispatchStoreBook: storeBook, dispatchGetBooks: getBooks}
+const mapDispatchToProps = {
+  dispatchUpdateBook: updateBook,
+  dispatchGetBook: getBook,
+  dispatchGetBooks: getBooks,
+}
 const connector = connect(mapStateToProps, mapDispatchToProps)
 type ReduxProps = ConnectedProps<typeof connector>
 type Props = ReduxProps
 
-function CreateBook({storeBookState, dispatchStoreBook, dispatchGetBooks}: Props) {
+function CreateBook({getBookState, updateBookState, dispatchUpdateBook, dispatchGetBook, dispatchGetBooks}: Props) {
   const navigate = useNavigate()
+  const {id: bookId} = useParams()
 
   const [title, setTitle] = React.useState('')
   const [description, setDescription] = React.useState('')
@@ -36,8 +42,9 @@ function CreateBook({storeBookState, dispatchStoreBook, dispatchGetBooks}: Props
 
   const handleFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    if (!storeBookState.started && !storeBookState.succeeded) {
+    if (!updateBookState.started && !updateBookState.succeeded) {
       const data: Book = {
+        id: bookId ? parseInt(bookId) : 0,
         title,
         description,
         author,
@@ -52,25 +59,50 @@ function CreateBook({storeBookState, dispatchStoreBook, dispatchGetBooks}: Props
         stock,
       }
 
-      dispatchStoreBook(data)
+      dispatchUpdateBook(data)
     }
   }
 
+  console.log(genre)
+
   useEffect(() => {
-    if (storeBookState.succeeded) {
-      dispatchStoreBook({reset: true})
+    if (updateBookState.succeeded) {
+      dispatchUpdateBook({reset: true})
       dispatchGetBooks({reset: true})
+      dispatchGetBook({reset: true})
 
       navigate('/books')
     }
-  }, [storeBookState.status])
+  }, [updateBookState.status])
+
+  useEffect(() => {
+    if (getBookState.unstarted && bookId) {
+      dispatchGetBook({id: parseInt(bookId)})
+    } else if (getBookState.succeeded) {
+      const book = getBookState.data
+      if (book) {
+        setTitle(book.title || '')
+        setDescription(book.description || '')
+        setAuthor(book.author || '')
+        setPublisher(book.publisher || '')
+        setPublishDate(book.published_at || '')
+        setIsbn(book.isbn || '')
+        setGenre(book.genre || '')
+        setLanguage(book.language || '')
+        setFormat(book.format || '')
+        setPages(book.pages || 0)
+        setPrice(book.price || 0.0)
+        setStock(book.stock || 0)
+      }
+    }
+  }, [getBookState.status])
 
   return (
     <AdminPanel
-      title="Add new book"
+      title={`Edit book`}
       breadcrumb={[
         {name: 'Books', link: '/books'},
-        {name: 'New book', link: '/books/new'},
+        {name: 'Edit book', link: `/books/${bookId}`}
       ]}
     >
       <div className="row">
@@ -92,7 +124,8 @@ function CreateBook({storeBookState, dispatchStoreBook, dispatchGetBooks}: Props
                       <label className="form-label">Title</label>
                       <InputValidation
                         onChange={(e: React.ChangeEvent<HTMLInputElement>) => setTitle(e.target.value)}
-                        reduxState={storeBookState}
+                        value={title || ""}
+                        reduxState={updateBookState}
                         field="title"
                         type="text"
                         className="form-control"
@@ -107,7 +140,8 @@ function CreateBook({storeBookState, dispatchStoreBook, dispatchGetBooks}: Props
                       <label className="form-label">Description</label>
                       <InputValidation
                         onChange={(e: React.ChangeEvent<HTMLInputElement>) => setDescription(e.target.value)}
-                        reduxState={storeBookState}
+                        value={description || ""}
+                        reduxState={updateBookState}
                         field="description"
                         isTextarea={true}
                         className="form-control"
@@ -123,7 +157,8 @@ function CreateBook({storeBookState, dispatchStoreBook, dispatchGetBooks}: Props
                       <label className="form-label">Author</label>
                       <InputValidation
                         onChange={(e: React.ChangeEvent<HTMLInputElement>) => setAuthor(e.target.value)}
-                        reduxState={storeBookState}
+                        value={author || ""}
+                        reduxState={updateBookState}
                         field="author"
                         type="text"
                         className="form-control"
@@ -138,7 +173,8 @@ function CreateBook({storeBookState, dispatchStoreBook, dispatchGetBooks}: Props
                       <label className="form-label">Publisher</label>
                       <InputValidation
                         onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPublisher(e.target.value)}
-                        reduxState={storeBookState}
+                        value={publisher || ""}
+                        reduxState={updateBookState}
                         field="publisher"
                         type="text"
                         className="form-control"
@@ -153,7 +189,8 @@ function CreateBook({storeBookState, dispatchStoreBook, dispatchGetBooks}: Props
                       <label className="form-label">Publish date</label>
                       <InputValidation
                         onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPublishDate(e.target.value)}
-                        reduxState={storeBookState}
+                        value={publishDate || ""}
+                        reduxState={updateBookState}
                         field="publish_at"
                         type="date"
                         className="form-control"
@@ -168,7 +205,8 @@ function CreateBook({storeBookState, dispatchStoreBook, dispatchGetBooks}: Props
                       <label className="form-label">ISBN</label>
                       <InputValidation
                         onChange={(e: React.ChangeEvent<HTMLInputElement>) => setIsbn(e.target.value)}
-                        reduxState={storeBookState}
+                        value={isbn || ""}
+                        reduxState={updateBookState}
                         field="isbn"
                         type="text"
                         className="form-control"
@@ -183,7 +221,8 @@ function CreateBook({storeBookState, dispatchStoreBook, dispatchGetBooks}: Props
                       <label className="form-label">Genre</label>
                       <InputValidation
                         onChange={(e: React.ChangeEvent<HTMLInputElement>) => setGenre(e.target.value)}
-                        reduxState={storeBookState}
+                        value={genre || ""}
+                        reduxState={updateBookState}
                         field="genre"
                         type="text"
                         className="form-control"
@@ -198,7 +237,8 @@ function CreateBook({storeBookState, dispatchStoreBook, dispatchGetBooks}: Props
                       <label className="form-label">Language</label>
                       <InputValidation
                         onChange={(e: React.ChangeEvent<HTMLInputElement>) => setLanguage(e.target.value)}
-                        reduxState={storeBookState}
+                        value={language || ""}
+                        reduxState={updateBookState}
                         field="language"
                         type="text"
                         className="form-control"
@@ -213,7 +253,8 @@ function CreateBook({storeBookState, dispatchStoreBook, dispatchGetBooks}: Props
                       <label className="form-label">Format</label>
                       <InputValidation
                         onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormat(e.target.value)}
-                        reduxState={storeBookState}
+                        value={format || ""}
+                        reduxState={updateBookState}
                         field="format"
                         type="text"
                         className="form-control"
@@ -227,8 +268,9 @@ function CreateBook({storeBookState, dispatchStoreBook, dispatchGetBooks}: Props
                     <div className="form-group">
                       <label className="form-label">Pages</label>
                       <InputValidation
-                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPages(parseInt(e.target.value))}
-                        reduxState={storeBookState}
+                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPages(e.target.value ? parseInt(e.target.value) : 0)}
+                        value={pages || ""}
+                        reduxState={updateBookState}
                         field="pages"
                         type="number"
                         className="form-control"
@@ -242,8 +284,9 @@ function CreateBook({storeBookState, dispatchStoreBook, dispatchGetBooks}: Props
                     <div className="form-group">
                       <label className="form-label">Price</label>
                         <InputValidation
-                          onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPrice(parseFloat(e.target.value))}
-                          reduxState={storeBookState}
+                          onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPrice(e.target.value ? parseFloat(e.target.value) : 0)}
+                          value={price || ""}
+                          reduxState={updateBookState}
                           field="price"
                           type="number"
                           className="form-control"
@@ -260,8 +303,9 @@ function CreateBook({storeBookState, dispatchStoreBook, dispatchGetBooks}: Props
                     <div className="form-group">
                       <label className="form-label">Stock</label>
                       <InputValidation
-                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setStock(parseInt(e.target.value))}
-                        reduxState={storeBookState}
+                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setStock(e.target.value ? parseInt(e.target.value) : 0)}
+                        value={stock || ""}
+                        reduxState={updateBookState}
                         field="stock"
                         type="number"
                         className="form-control"

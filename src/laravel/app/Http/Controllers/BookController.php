@@ -9,15 +9,12 @@ use Illuminate\Http\Request;
 class BookController extends Controller
 {
 
-    // Show books with pagination on index function
     public function index()
     {
-        $books = Book::orderBy('title')
-            ->paginate(10);
+        $books = Book::orderBy('created_at', 'desc')
+            ->paginate(100);
 
-        return response()->json([
-            'books' => $books,
-        ], 200);
+        return response()->json($books, 200);
     }
 
     public function store(BookRequest $request)
@@ -44,16 +41,30 @@ class BookController extends Controller
 
     public function show($id)
     {
+        $book = Book::findOrFail($id);
 
+        return response()->json($book, 200);
     }
 
-    public function update($id)
+    public function update(BookRequest $request, $id)
     {
+        \Log::info($request->all());
+        $validatedData = $request->validated();
+        $book = Book::findOrFail($id);
 
+        $book->update($validatedData);
+
+        return response()->json([
+            'message' => 'Book updated successfully',
+        ], 200);
     }
 
     public function destroy($id)
     {
+        Book::destroy($id);
 
+        return response()->json([
+            'message' => 'Book deleted successfully',
+        ], 200);
     }
 }

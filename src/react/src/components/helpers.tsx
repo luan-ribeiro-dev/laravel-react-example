@@ -1,5 +1,5 @@
 import React from "react"
-import { APIConstants, ApiReturn } from "../api"
+import { ApiReturn } from "../api"
 import { hasError } from "../api/helpers"
 
 export function renderValidationFeedback(reduxState: ApiReturn<any>, field: string) {
@@ -17,7 +17,7 @@ export function renderValidationFeedback(reduxState: ApiReturn<any>, field: stri
 export const InputValidation = ({reduxState, field, isTextarea = false, ...props}: any) => {
   const hasErr = hasError(reduxState, field)
   const isValid = !hasErr 
-    && reduxState.status === APIConstants.FAILED 
+    && reduxState.failed
     && reduxState.error?.data
     && !(field in reduxState.error?.data)
   let className = "form-control"

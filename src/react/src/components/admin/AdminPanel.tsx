@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react'
 import { ConnectedProps, connect } from 'react-redux'
 import { logoutUser } from '../../api/requests/users'
 import { RootState } from '../../api/store/type';
-import { APIConstants } from '../../api';
 import { Link } from 'react-router-dom';
 import Footer from '../shared/Footer';
 import Navbar from '../shared/Navbar';
@@ -30,19 +29,19 @@ function AdminPanel({getUserState, logoutUserState, dispatchLogoutUser, breadcru
   const [userName, setUserName] = useState('')
 
   const handleSignOut = () => {
-    if (logoutUserState.status !== APIConstants.STARTED) {
+    if (!logoutUserState.started) {
       dispatchLogoutUser()
     }
   }
 
   useEffect(() => {
-    if (logoutUserState.status === APIConstants.SUCCEEDED) {
+    if (logoutUserState.succeeded) {
       window.location.href = '/sign-in'
     }
   }, [logoutUserState.status])
 
   useEffect(() => {
-    if (getUserState.status === APIConstants.SUCCEEDED) {
+    if (getUserState.succeeded) {
       setUserName(getUserState.data.name)
     }
   }, [getUserState.status])

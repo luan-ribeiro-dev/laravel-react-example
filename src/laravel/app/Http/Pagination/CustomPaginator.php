@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Pagination;
+namespace App\Http\Pagination;
 
 use Illuminate\Pagination\LengthAwarePaginator;
 
@@ -9,10 +9,10 @@ class CustomPaginator extends LengthAwarePaginator
     public function toArray(): array
     {
         return [
-            'data' => $this->items->toArray(),
+            'list' => $this->items->toArray(),
             'meta' => [
-                'currentPage' => $this->currentPage(),
-                'lastPage' => $this->lastPage(),
+                'current_page' => $this->currentPage(),
+                'last_page' => $this->lastPage(),
                 'from' => $this->firstItem(),
                 'to' => $this->lastItem(),
                 'total' => $this->total(),

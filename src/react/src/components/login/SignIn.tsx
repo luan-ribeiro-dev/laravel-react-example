@@ -3,7 +3,6 @@ import { ConnectedProps, connect } from 'react-redux'
 import { loginUser } from '../../api/requests/users'
 import { Link } from 'react-router-dom';
 import { RootState } from '../../api/store/type';
-import { APIConstants } from '../../api';
 import { toast } from 'react-toastify';
 
 function mapStateToProps(state: RootState) {
@@ -23,15 +22,15 @@ function SignIn({loginUserState, dispatchLoginUser}: Props) {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    if (loginUserState.status !== APIConstants.STARTED) {
+    if (!loginUserState.started) {
       dispatchLoginUser(email, password)
     }
   }
 
   useEffect(() => {
-    if (loginUserState.status === APIConstants.SUCCEEDED) {
+    if (loginUserState.succeeded) {
       window.location.href = 'dashboard'
-    } else if (loginUserState.status === APIConstants.FAILED) {
+    } else if (loginUserState.failed) {
       toast.error("Email or password is incorrect")
     }
   }, [loginUserState.status])
@@ -68,7 +67,7 @@ function SignIn({loginUserState, dispatchLoginUser}: Props) {
                         <div className="mb-3">
                           <input
                             type="email"
-                            className={`form-control ${loginUserState.status === APIConstants.FAILED && 'is-invalid'}`}
+                            className={`form-control ${loginUserState.failed&& 'is-invalid'}`}
                             placeholder="Email"
                             aria-label="Email"
                             aria-describedby="email-addon"
@@ -80,7 +79,7 @@ function SignIn({loginUserState, dispatchLoginUser}: Props) {
                         <div className="mb-3">
                           <input
                             type="password"
-                            className={`form-control ${loginUserState.status === APIConstants.FAILED && 'is-invalid'}`}
+                            className={`form-control ${loginUserState.failed&& 'is-invalid'}`}
                             placeholder="Password"
                             aria-label="Password"
                             aria-describedby="password-addon"

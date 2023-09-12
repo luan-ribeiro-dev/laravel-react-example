@@ -1,33 +1,50 @@
 import React, { useEffect } from 'react'
 import { ConnectedProps, connect } from 'react-redux'
 import { RootState } from '../../../api/store/type';
-import { APIConstants } from '../../../api';
 import { Link } from 'react-router-dom';
-import Footer from '../../shared/Footer';
-import Navbar from '../../shared/Navbar';
 import AdminPanel from '../AdminPanel';
-import { getBooks } from '../../../api/requests/admin/books';
+import { Book, deleteBook, getBooks } from '../../../api/requests/admin/books';
 
-function mapStateToProps(state: RootState) {
-  return {
-    getBooksState: state.admin.books.getBooks
-  }
+const mapStateToProps = (state: RootState) => ({
+  getBooksState: state.admin.books.getBooks,
+  deleteBookState: state.admin.books.deleteBook,
+})
+
+const mapDispatchToProps = {
+  dispatchGetBooks: getBooks,
+  dispatchDeleteBook: deleteBook,
+  // dispatchUpdateBook: updateBook
 }
-
-const mapDispatchToProps = {dispatchGetBooks: getBooks}
 const connector = connect(mapStateToProps, mapDispatchToProps)
 type ReduxProps = ConnectedProps<typeof connector>
 type Props = ReduxProps
 
-function Books({getBooksState, dispatchGetBooks}: Props) {
+function Books({getBooksState, deleteBookState, dispatchGetBooks, dispatchDeleteBook}: Props) {
+  const [books, setBooks] = React.useState<Book[]>()
+
+  const handleDeleteBook = (book: Book) => {
+    if (
+      book.id 
+      && !deleteBookState.started
+      && window.confirm(`Are you sure you want to delete the book '${book.title}'?`)
+    ) {
+      dispatchDeleteBook(book.id)
+    }
+  }
 
   useEffect(() => {
-    if (getBooksState.status === APIConstants.UNSTARTED) {
+    if (getBooksState.unstarted) {
       dispatchGetBooks()
+    } else if (getBooksState.succeeded) {
+      setBooks(getBooksState.data?.list || [])
     }
   }, [getBooksState.status])
 
-  console.log(getBooksState)
+  useEffect(() => {
+    if (deleteBookState.succeeded) {
+      dispatchGetBooks()
+    }
+  }, [deleteBookState.status])
 
   return (
     <AdminPanel
@@ -59,265 +76,47 @@ function Books({getBooksState, dispatchGetBooks}: Props) {
                 <table className="table align-items-center mb-0">
                   <thead>
                     <tr>
-                      <th className="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Name</th>
+                      <th className="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Name</th>
                       <th className="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Author</th>
-                      <th className="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">ISBN</th>
-                      <th className="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Genre</th>
+                      <th className="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">ISBN</th>
+                      <th className="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Genre</th>
                       <th className="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Stock</th>
                       <th className="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Action</th>
                     </tr>
                   </thead>
-                  <tbody>
-                    {/* {getBooksState.status === APIConstants.SUCCEEDED} */}
-                    <tr>
-                      <td>
-                        <div className="d-flex px-2 py-1">
-                          <div>
-                            <img src="../assets/img/small-logos/logo-xd.svg" className="avatar avatar-sm me-3" alt="xd" />
+                  <tbody className="ps-4">
+                    {books?.map((book, index) => (
+                      <tr key={`admin-book-tr-${index}`}>
+                        <td className="py-3" style={{maxWidth: "150px"}}>
+                          <h6 className="mb-0 text-sm text-truncate">{book.title}</h6>
+                        </td>
+                        <td className="py-3">
+                          <h6 className="mb-0 text-sm text-truncate">{book.author}</h6>
+                        </td>
+                        <td className="py-3">
+                          <h6 className="mb-0 text-sm">{book.isbn}</h6>
+                        </td>
+                        <td className="py-3">
+                          <h6 className="mb-0 text-sm text-truncate">{book.genre}</h6>
+                        </td>
+                        <td className="text-center">
+                          <h6 className="mb-0 text-sm">{book.stock}</h6>
+                        </td>
+                        <td>
+                          <div className="d-flex justify-content-center">
+                            {/* add bootstrap box-shadow for each icon */}
+                            <Link to={`/books/${book.id}`}>
+                              <button className="btn btn-info btn-sm m-0 me-2">
+                                Edit
+                              </button>
+                            </Link>
+                            <button className="btn btn-danger btn-sm m-0" onClick={() => handleDeleteBook(book)}>
+                              Delete
+                            </button>
                           </div>
-                          <div className="d-flex flex-column justify-content-center">
-                            <h6 className="mb-0 text-sm">Soft UI XD Version</h6>
-                          </div>
-                        </div>
-                      </td>
-                      <td>
-                        <div className="avatar-group mt-2">
-                          <a className="avatar avatar-xs rounded-circle" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Ryan Tompson">
-                            <img src="../assets/img/team-1.jpg" alt="team1" />
-                          </a>
-                          <a className="avatar avatar-xs rounded-circle" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Romina Hadid">
-                            <img src="../assets/img/team-2.jpg" alt="team2" />
-                          </a>
-                          <a className="avatar avatar-xs rounded-circle" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Alexander Smith">
-                            <img src="../assets/img/team-3.jpg" alt="team3" />
-                          </a>
-                          <a className="avatar avatar-xs rounded-circle" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Jessica Doe">
-                            <img src="../assets/img/team-4.jpg" alt="team4" />
-                          </a>
-                        </div>
-                      </td>
-                      <td className="align-middle text-center text-sm">
-                        <span className="text-xs font-weight-bold"> 10.000 </span>
-                      </td>
-                      <td className="align-middle text-center text-sm">
-                        <span className="text-xs font-weight-bold"> $14,000 </span>
-                      </td>
-                      <td className="align-middle">
-                        <div className="progress-wrapper w-75 mx-auto">
-                          <div className="progress-info">
-                            <div className="progress-percentage">
-                              <span className="text-xs font-weight-bold">60%</span>
-                            </div>
-                          </div>
-                          <div className="progress">
-                            <div className="progress-bar bg-gradient-info w-60" role="progressbar" aria-valuenow={60} aria-valuemin={0} aria-valuemax={100}></div>
-                          </div>
-                        </div>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <div className="d-flex px-2 py-1">
-                          <div>
-                            <img src="../assets/img/small-logos/logo-atlassian.svg" className="avatar avatar-sm me-3" alt="atlassian" />
-                          </div>
-                          <div className="d-flex flex-column justify-content-center">
-                            <h6 className="mb-0 text-sm">Add Progress Track</h6>
-                          </div>
-                        </div>
-                      </td>
-                      <td>
-                        <div className="avatar-group mt-2">
-                          <a className="avatar avatar-xs rounded-circle" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Romina Hadid">
-                            <img src="../assets/img/team-2.jpg" alt="team5" />
-                          </a>
-                          <a className="avatar avatar-xs rounded-circle" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Jessica Doe">
-                            <img src="../assets/img/team-4.jpg" alt="team6" />
-                          </a>
-                        </div>
-                      </td>
-                      <td className="align-middle text-center text-sm">
-                        <span className="text-xs font-weight-bold"> 10.000 </span>
-                      </td>
-                      <td className="align-middle text-center text-sm">
-                        <span className="text-xs font-weight-bold"> $3,000 </span>
-                      </td>
-                      <td className="align-middle">
-                        <div className="progress-wrapper w-75 mx-auto">
-                          <div className="progress-info">
-                            <div className="progress-percentage">
-                              <span className="text-xs font-weight-bold">10%</span>
-                            </div>
-                          </div>
-                          <div className="progress">
-                            <div className="progress-bar bg-gradient-info w-10" role="progressbar" aria-valuenow={10} aria-valuemin={0} aria-valuemax={100}></div>
-                          </div>
-                        </div>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <div className="d-flex px-2 py-1">
-                          <div>
-                            <img src="../assets/img/small-logos/logo-slack.svg" className="avatar avatar-sm me-3" alt="team7" />
-                          </div>
-                          <div className="d-flex flex-column justify-content-center">
-                            <h6 className="mb-0 text-sm">Fix Platform Errors</h6>
-                          </div>
-                        </div>
-                      </td>
-                      <td>
-                        <div className="avatar-group mt-2">
-                          <a className="avatar avatar-xs rounded-circle" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Romina Hadid">
-                            <img src="../assets/img/team-3.jpg" alt="team8" />
-                          </a>
-                          <a className="avatar avatar-xs rounded-circle" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Jessica Doe">
-                            <img src="../assets/img/team-1.jpg" alt="team9" />
-                          </a>
-                        </div>
-                      </td>
-                      <td className="align-middle text-center text-sm">
-                        <span className="text-xs font-weight-bold"> 10.000 </span>
-                      </td>
-                      <td className="align-middle text-center text-sm">
-                        <span className="text-xs font-weight-bold"> Not set </span>
-                      </td>
-                      <td className="align-middle">
-                        <div className="progress-wrapper w-75 mx-auto">
-                          <div className="progress-info">
-                            <div className="progress-percentage">
-                              <span className="text-xs font-weight-bold">100%</span>
-                            </div>
-                          </div>
-                          <div className="progress">
-                            <div className="progress-bar bg-gradient-success w-100" role="progressbar" aria-valuenow={100} aria-valuemin={0} aria-valuemax={100}></div>
-                          </div>
-                        </div>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <div className="d-flex px-2 py-1">
-                          <div>
-                            <img src="../assets/img/small-logos/logo-spotify.svg" className="avatar avatar-sm me-3" alt="spotify" />
-                          </div>
-                          <div className="d-flex flex-column justify-content-center">
-                            <h6 className="mb-0 text-sm">Launch our Mobile App</h6>
-                          </div>
-                        </div>
-                      </td>
-                      <td>
-                        <div className="avatar-group mt-2">
-                          <a className="avatar avatar-xs rounded-circle" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Ryan Tompson">
-                            <img src="../assets/img/team-4.jpg" alt="user1" />
-                          </a>
-                          <a className="avatar avatar-xs rounded-circle" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Romina Hadid">
-                            <img src="../assets/img/team-3.jpg" alt="user2" />
-                          </a>
-                          <a className="avatar avatar-xs rounded-circle" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Alexander Smith">
-                            <img src="../assets/img/team-4.jpg" alt="user3" />
-                          </a>
-                          <a className="avatar avatar-xs rounded-circle" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Jessica Doe">
-                            <img src="../assets/img/team-1.jpg" alt="user4" />
-                          </a>
-                        </div>
-                      </td>
-                      <td className="align-middle text-center text-sm">
-                        <span className="text-xs font-weight-bold"> 10.000 </span>
-                      </td>
-                      <td className="align-middle text-center text-sm">
-                        <span className="text-xs font-weight-bold"> $20,500 </span>
-                      </td>
-                      <td className="align-middle">
-                        <div className="progress-wrapper w-75 mx-auto">
-                          <div className="progress-info">
-                            <div className="progress-percentage">
-                              <span className="text-xs font-weight-bold">100%</span>
-                            </div>
-                          </div>
-                          <div className="progress">
-                            <div className="progress-bar bg-gradient-success w-100" role="progressbar" aria-valuenow={100} aria-valuemin={0} aria-valuemax={100}></div>
-                          </div>
-                        </div>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <div className="d-flex px-2 py-1">
-                          <div>
-                            <img src="../assets/img/small-logos/logo-jira.svg" className="avatar avatar-sm me-3" alt="jira" />
-                          </div>
-                          <div className="d-flex flex-column justify-content-center">
-                            <h6 className="mb-0 text-sm">Add the New Pricing Page</h6>
-                          </div>
-                        </div>
-                      </td>
-                      <td>
-                        <div className="avatar-group mt-2">
-                          <a className="avatar avatar-xs rounded-circle" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Ryan Tompson">
-                            <img src="../assets/img/team-4.jpg" alt="user5" />
-                          </a>
-                        </div>
-                      </td>
-                      <td className="align-middle text-center text-sm">
-                        <span className="text-xs font-weight-bold"> 10.000 </span>
-                      </td>
-                      <td className="align-middle text-center text-sm">
-                        <span className="text-xs font-weight-bold"> $500 </span>
-                      </td>
-                      <td className="align-middle">
-                        <div className="progress-wrapper w-75 mx-auto">
-                          <div className="progress-info">
-                            <div className="progress-percentage">
-                              <span className="text-xs font-weight-bold">25%</span>
-                            </div>
-                          </div>
-                          <div className="progress">
-                            <div className="progress-bar bg-gradient-info w-25" role="progressbar" aria-valuenow={25} aria-valuemin={0} aria-valuemax={25}></div>
-                          </div>
-                        </div>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <div className="d-flex px-2 py-1">
-                          <div>
-                            <img src="../assets/img/small-logos/logo-invision.svg" className="avatar avatar-sm me-3" alt="invision" />
-                          </div>
-                          <div className="d-flex flex-column justify-content-center">
-                            <h6 className="mb-0 text-sm">Redesign New Online Shop</h6>
-                          </div>
-                        </div>
-                      </td>
-                      <td>
-                        <div className="avatar-group mt-2">
-                          <a className="avatar avatar-xs rounded-circle" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Ryan Tompson">
-                            <img src="../assets/img/team-1.jpg" alt="user6" />
-                          </a>
-                          <a className="avatar avatar-xs rounded-circle" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Jessica Doe">
-                            <img src="../assets/img/team-4.jpg" alt="user7" />
-                          </a>
-                        </div>
-                      </td>
-                      <td className="align-middle text-center text-sm">
-                        <span className="text-xs font-weight-bold"> 10.000 </span>
-                      </td>
-                      <td className="align-middle text-center text-sm">
-                        <span className="text-xs font-weight-bold"> $2,000 </span>
-                      </td>
-                      <td className="align-middle">
-                        <div className="progress-wrapper w-75 mx-auto">
-                          <div className="progress-info">
-                            <div className="progress-percentage">
-                              <span className="text-xs font-weight-bold">40%</span>
-                            </div>
-                          </div>
-                          <div className="progress">
-                            <div className="progress-bar bg-gradient-info w-40" role="progressbar" aria-valuenow={40} aria-valuemin={0} aria-valuemax={40}></div>
-                          </div>
-                        </div>
-                      </td>
-                    </tr>
+                        </td>
+                      </tr>
+                    ))}
                   </tbody>
                 </table>
               </div>

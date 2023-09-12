@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react'
 import { ConnectedProps, connect } from 'react-redux'
 import { getUser } from './api/requests/users'
-import { APIConstants } from './api'
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { RootState } from './api/store/type'
 import { adminRoutes, publicRoutes } from './routes';
@@ -21,7 +20,8 @@ type Props = ReduxProps
 
 const Router = ({getUserState, dispatchGetUser}: Props) => {
   useEffect(() => {
-    if (getUserState.status === APIConstants.UNSTARTED) {
+    console.log(getUserState)
+    if (getUserState.unstarted) {
       dispatchGetUser()
     }
   }, [])
@@ -30,7 +30,7 @@ const Router = ({getUserState, dispatchGetUser}: Props) => {
   return (
     <BrowserRouter>
       <Routes>
-        {getUserState.status === APIConstants.SUCCEEDED && (
+        {getUserState.succeeded && (
           <React.Fragment>
             {adminRoutes.map((route, index) => (
               <Route key={`route-${index}`} {...route} />
@@ -39,7 +39,7 @@ const Router = ({getUserState, dispatchGetUser}: Props) => {
           </React.Fragment>
         )}
 
-        {getUserState.status === APIConstants.FAILED && (
+        {getUserState.failed && (
           <React.Fragment>
             {publicRoutes.map((route, index) => (
               <Route key={`route-${index}`} {...route} />
