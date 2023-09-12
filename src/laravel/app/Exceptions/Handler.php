@@ -40,6 +40,11 @@ class Handler extends ExceptionHandler
                     'type' => 'VALIDATION',
                     'errors' => $e->errors()
                 ], 422);
+            } else if ($e instanceof \Illuminate\Database\Eloquent\ModelNotFoundException) {
+                return response()->json([
+                    'message' => 'Not found',
+                    'type' => 'NOT_FOUND',
+                ], 404);
             }
         }
 

@@ -1,10 +1,9 @@
 import React, { useEffect } from 'react'
 import { ConnectedProps, connect } from 'react-redux'
 import { getUser } from './api/requests/users'
-import { APIConstants } from './api'
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { RootState } from './api/store/type'
-import { authRoutes, publicRoutes } from './routes';
+import { adminRoutes, publicRoutes } from './routes';
 import { ToastContainer } from 'react-toastify'
 
 function mapStateToProps(state: RootState) {
@@ -21,7 +20,8 @@ type Props = ReduxProps
 
 const Router = ({getUserState, dispatchGetUser}: Props) => {
   useEffect(() => {
-    if (getUserState.status === APIConstants.UNSTARTED) {
+    console.log(getUserState)
+    if (getUserState.unstarted) {
       dispatchGetUser()
     }
   }, [])
@@ -30,16 +30,16 @@ const Router = ({getUserState, dispatchGetUser}: Props) => {
   return (
     <BrowserRouter>
       <Routes>
-        {getUserState.status === APIConstants.SUCCEEDED && (
+        {getUserState.succeeded && (
           <React.Fragment>
-            {authRoutes.map((route, index) => (
+            {adminRoutes.map((route, index) => (
               <Route key={`route-${index}`} {...route} />
             ))}
             <Route path="*" element={<Navigate to="/dashboard" />} />
           </React.Fragment>
         )}
 
-        {getUserState.status === APIConstants.FAILED && (
+        {getUserState.failed && (
           <React.Fragment>
             {publicRoutes.map((route, index) => (
               <Route key={`route-${index}`} {...route} />

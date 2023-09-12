@@ -19,6 +19,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        $this->app->bind(
+            \Illuminate\Pagination\LengthAwarePaginator::class,
+            \App\Http\Pagination\CustomPaginator::class
+        );
     }
 }
