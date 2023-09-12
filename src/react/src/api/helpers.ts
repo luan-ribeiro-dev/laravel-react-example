@@ -1,5 +1,5 @@
 import { AxiosError } from "axios";
-import { APIConstants, APIErrors, ApiReturn } from ".";
+import { APIErrors, ApiReturn } from ".";
 
 export function handleError(error: Error) {
   if (error instanceof AxiosError) {
@@ -17,11 +17,15 @@ export function handleError(error: Error) {
 }
 
 export function hasError(reduxState: ApiReturn<any>, field: string) {
-  return reduxState.status === APIConstants.FAILED 
+  return reduxState.failed 
   && reduxState.error
   && "data" in reduxState.error
   && "type" in reduxState.error
   && reduxState.error.data
   && reduxState.error.type === APIErrors.VALIDATION
   && field in reduxState.error.data
+}
+
+export function isNull(value: any) {
+  return !value || value == null || value == undefined || value == "" || Number.isNaN(value) || value == 0
 }
