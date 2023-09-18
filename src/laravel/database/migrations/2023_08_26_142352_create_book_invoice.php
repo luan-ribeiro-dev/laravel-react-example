@@ -15,6 +15,9 @@ return new class extends Migration
             $table->id();
             $table->foreignId('invoice_id')->constrained('invoices');
             $table->foreignId('book_id')->constrained('books');
+            $table->integer('quantity');
+            $table->integer('stock');
+            $table->float('price');
             $table->timestamps();
         });
     }

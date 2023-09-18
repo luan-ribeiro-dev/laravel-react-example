@@ -20645,6 +20645,10 @@ hr.horizontal.gray-light {
   cursor: pointer;
 }
 
+.cursor-not-allowed {
+  cursor: not-allowed !important
+}
+
 .transform-translate-50 {
   transform: translate(0, -50%);
 }
@@ -24910,6 +24914,14 @@ pre[class*="language-"] {
 .ps__rail-y.ps--clicking .ps__thumb-y {
   background-color: #999;
   width: 11px;
+}
+
+.customer-book-container .title {
+  margin: 0;
+  /* text-wrap: wrap; */
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
 }
 
 /* MS supports */

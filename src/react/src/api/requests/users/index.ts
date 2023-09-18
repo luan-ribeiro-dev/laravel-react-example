@@ -5,6 +5,15 @@ export enum Constants {
   STORE_USER = "@USERS/STORE_USER",
   LOGOUT_USER = "@USERS/LOGOUT_USER",
   LOGIN_USER = "@USERS/LOGIN_USER",
+
+  ADMIN = 'admin',
+  CUSTOMER = 'customer',
+}
+
+export type User = {
+  name: string
+  email: string
+  role: Constants.ADMIN | Constants.CUSTOMER
 }
 
 export function getUser() {
@@ -40,7 +49,7 @@ export function logoutUser() {
 }
 
 export type UsersState = {
-  getUser: ApiReturn<any>
+  getUser: ApiReturn<User>
   storeUser: ApiReturn<any>
   logoutUser: ApiReturn<any>
   loginUser: ApiReturn<any>

@@ -11,10 +11,16 @@ class BookController extends Controller
 
     public function index()
     {
+        $user = auth()->user();
         $books = Book::orderBy('created_at', 'desc')
-            ->paginate(100);
+            ->orderBy('id', 'desc');
 
-        return response()->json($books, 200);
+        if ($user->role === 'customer') {
+            $books->where('stock', '>', 0)
+                ->select('id', 'title', 'author', 'price', 'stock');
+        }
+
+        return response()->json($books->paginate(100), 200);
     }
 
     public function store(BookRequest $request)
@@ -28,6 +34,7 @@ class BookController extends Controller
         while ($count > 1000000) {
             $bookRemoveCount = 1000;
             Book::orderBy('created_at', 'asc')
+                ->orderBy('id', 'asc')
                 ->take($bookRemoveCount)
                 ->delete();
 
@@ -48,7 +55,6 @@ class BookController extends Controller
 
     public function update(BookRequest $request, $id)
     {
-        \Log::info($request->all());
         $validatedData = $request->validated();
         $book = Book::findOrFail($id);
 

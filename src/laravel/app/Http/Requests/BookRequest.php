@@ -33,7 +33,7 @@ class BookRequest extends FormRequest
             'format' => 'string|max:255|nullable',
             'pages' => 'integer|min:0|max:99999|nullable',
             'price' => 'required|numeric|min:0.1|max:999999.99',
-            'stock' => 'integer|min:0|max:99999|nullable',
+            'stock' => 'required|integer|min:0|max:99999',
         ];
     }
 }

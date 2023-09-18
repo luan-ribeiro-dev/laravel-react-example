@@ -2,8 +2,8 @@ import React, { useEffect } from 'react'
 import { ConnectedProps, connect } from 'react-redux'
 import { loginUser } from '../../api/requests/users'
 import { Link } from 'react-router-dom';
-import { RootState } from '../../api/store/type';
 import { toast } from 'react-toastify';
+import { RootState } from '../../api/store/reducers';
 
 function mapStateToProps(state: RootState) {
   return {

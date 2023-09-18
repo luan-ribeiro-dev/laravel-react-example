@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import { ConnectedProps, connect } from 'react-redux'
-import { RootState } from '../../../api/store/type';
+import { RootState } from '../../../api/store/reducers';
 import { useNavigate, useParams } from 'react-router-dom';
 import AdminPanel from '../AdminPanel';
 import { Book, getBook, getBooks, updateBook } from '../../../api/requests/admin/books';
@@ -63,8 +63,6 @@ function CreateBook({getBookState, updateBookState, dispatchUpdateBook, dispatch
     }
   }
 
-  console.log(genre)
-
   useEffect(() => {
     if (updateBookState.succeeded) {
       dispatchUpdateBook({reset: true})
@@ -76,9 +74,7 @@ function CreateBook({getBookState, updateBookState, dispatchUpdateBook, dispatch
   }, [updateBookState.status])
 
   useEffect(() => {
-    if (getBookState.unstarted && bookId) {
-      dispatchGetBook({id: parseInt(bookId)})
-    } else if (getBookState.succeeded) {
+    if (getBookState.succeeded) {
       const book = getBookState.data
       if (book) {
         setTitle(book.title || '')
@@ -97,6 +93,10 @@ function CreateBook({getBookState, updateBookState, dispatchUpdateBook, dispatch
     }
   }, [getBookState.status])
 
+  useEffect(() => {
+    bookId && dispatchGetBook({id: parseInt(bookId)})
+  }, [])
+
   return (
     <AdminPanel
       title={`Edit book`}
@@ -110,9 +110,6 @@ function CreateBook({getBookState, updateBookState, dispatchUpdateBook, dispatch
           <div className="card">
             <div className="card-header pb-3 pt-3 border-bottom d-flex justify-content-between">
               <h6 className="mb-0">Book details</h6>
-              <button className="btn btn-primary btn-sm mb-0">
-                <span className="pt-1">Save</span>
-              </button>
             </div>
             <div className="card-body pb-2">
               {/* Create a book form */}

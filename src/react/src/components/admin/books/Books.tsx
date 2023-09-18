@@ -1,9 +1,9 @@
 import React, { useEffect } from 'react'
 import { ConnectedProps, connect } from 'react-redux'
-import { RootState } from '../../../api/store/type';
 import { Link } from 'react-router-dom';
 import AdminPanel from '../AdminPanel';
 import { Book, deleteBook, getBooks } from '../../../api/requests/admin/books';
+import { RootState } from '../../../api/store/reducers';
 
 const mapStateToProps = (state: RootState) => ({
   getBooksState: state.admin.books.getBooks,

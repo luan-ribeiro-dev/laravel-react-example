@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import { ConnectedProps, connect } from 'react-redux'
 import { logoutUser } from '../../api/requests/users'
-import { RootState } from '../../api/store/type';
 import { Link } from 'react-router-dom';
 import Footer from '../shared/Footer';
 import Navbar from '../shared/Navbar';
+import { RootState } from '../../api/store/reducers';
 
 function mapStateToProps(state: RootState) {
   return {
@@ -41,7 +41,7 @@ function AdminPanel({getUserState, logoutUserState, dispatchLogoutUser, breadcru
   }, [logoutUserState.status])
 
   useEffect(() => {
-    if (getUserState.succeeded) {
+    if (getUserState.succeeded && getUserState.data) {
       setUserName(getUserState.data.name)
     }
   }, [getUserState.status])

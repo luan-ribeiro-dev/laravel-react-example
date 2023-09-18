@@ -35,7 +35,7 @@ export function storeBook(data: Book | ApiReset) {
 
 export function getBooks(data?: ApiReset) {
   return api(Constants.GET_BOOKS, {
-    url: 'admin/books',
+    url: 'books',
     method: 'GET',
     data,
   })
@@ -43,7 +43,7 @@ export function getBooks(data?: ApiReset) {
 
 export function getBook(data: {id: number} | ApiReset) {
   return api(Constants.GET_BOOK, {
-    url: `admin/books/${'id' in data && data?.id}`,
+    url: `books/${'id' in data && data?.id}`,
     method: 'GET',
     data,
   })

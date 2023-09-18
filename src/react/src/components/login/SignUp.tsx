@@ -2,8 +2,8 @@ import React, { useEffect, useState } from 'react'
 import { ConnectedProps, connect } from 'react-redux'
 import { storeUser } from '../../api/requests/users'
 import { Link } from 'react-router-dom';
-import { RootState } from '../../api/store/type';
 import { InputValidation } from '../helpers';
+import { RootState } from '../../api/store/reducers';
 
 function mapStateToProps(state: RootState) {
   return {

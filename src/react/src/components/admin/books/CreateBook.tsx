@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import { ConnectedProps, connect } from 'react-redux'
-import { RootState } from '../../../api/store/type';
+import { RootState } from '../../../api/store/reducers';
 import { useNavigate } from 'react-router-dom';
 import AdminPanel from '../AdminPanel';
 import { Book, getBooks, storeBook } from '../../../api/requests/admin/books';

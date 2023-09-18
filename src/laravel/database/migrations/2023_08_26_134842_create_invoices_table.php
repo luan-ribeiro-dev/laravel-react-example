@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('invoice_number');
             $table->foreignId('user_id')->constrained('users');
-            $table->integer('total_price');
+            $table->float('total_price');
             $table->enum('status', ['pending', 'paid', 'failed', 'expired']);
             $table->timestamps();
         });
