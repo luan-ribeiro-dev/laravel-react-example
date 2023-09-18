@@ -9,6 +9,7 @@ enum APIConstants {
   STARTED = "STARTED",
   SUCCEEDED = "SUCCEEDED",
   FAILED = "FAILED",
+  CONSTANT = "CONSTANT",
 }
 
 export enum APIErrors {
@@ -31,6 +32,7 @@ export type ApiReturn<T> = {
   started: boolean
   succeeded: boolean
   failed: boolean
+  constant: boolean
   data?: T,
   error?: {
     type: APIErrors,
@@ -66,11 +68,13 @@ export function apiReducer<T>(type?: string): ActionCreator<ApiReturn<T>> {
         started: action.status === APIConstants.STARTED,
         succeeded: action.status === APIConstants.SUCCEEDED,
         failed: action.status === APIConstants.FAILED,
+        constant: action.status === APIConstants.CONSTANT,
       }
       switch (action.status) {
         case APIConstants.UNSTARTED:
         case APIConstants.STARTED:
           return apiStatus
+        case APIConstants.CONSTANT:
         case APIConstants.SUCCEEDED:
           return {
             ...apiStatus,
@@ -110,6 +114,15 @@ export default function api<T>(type:string, {url = '', method = '', enableToast 
       type,
       status: APIConstants.STARTED
     })
+
+    if (!url && !method) {
+      dispatch({
+        type,
+        status: APIConstants.CONSTANT,
+        data: options.data,
+      })
+      return Promise.resolve()
+    }
     
     const AxiosOptions: AxiosRequestConfig = {url,method}
 

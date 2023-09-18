@@ -10,7 +10,7 @@ class Invoice extends Model
 {
     use HasFactory;
 
-    protected $table = 'invoice';
+    protected $table = 'invoices';
     protected $fillable = [
         'invoice_number',
         'user_id',
@@ -25,6 +25,6 @@ class Invoice extends Model
 
     public function books(): BelongsToMany
     {
-        return $this->belongsToMany(Book::class, 'book_invoice', 'invoice_id', 'book_id');
+        return $this->belongsToMany(Book::class, 'book_invoice', 'invoice_id', 'book_id')->withPivot(['quantity', 'price', 'stock']);
     }
 }

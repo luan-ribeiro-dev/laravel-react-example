@@ -1,7 +1,7 @@
 import { ConnectedProps, connect } from 'react-redux'
 import { logoutUser } from '../../api/requests/users'
-import { RootState } from '../../api/store/type';
 import AdminPanel from './AdminPanel';
+import { RootState } from '../../api/store/reducers';
 
 function mapStateToProps(state: RootState) {
   return {
