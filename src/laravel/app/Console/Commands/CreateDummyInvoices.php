@@ -27,12 +27,12 @@ class CreateDummyInvoices extends Command
     public function handle()
     {
         // Create 1000 dummy invoices with books attached using the InvoiceFactory
-        $this->info('Creating dummy invoices (0/1000)');
+        $this->info('Creating dummy invoices (0/10000)');
 
         $books = Book::factory()->count(50)->create();
         for ($i = 1; $i <= 10; $i++) {
-            \App\Models\Invoice::factory()->withBooks($books)->count(100)->create();
-            $this->info('Creating dummy invoices (' . $i * 100 . '/1000)');
+            \App\Models\Invoice::factory()->withBooks($books)->count(1000)->create();
+            $this->info('Creating dummy invoices (' . $i * 1000 . '/10000)');
         }
     }
 }

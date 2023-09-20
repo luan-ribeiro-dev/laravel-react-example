@@ -5,6 +5,8 @@ export enum Constants {
   STORE_USER = "@USERS/STORE_USER",
   LOGOUT_USER = "@USERS/LOGOUT_USER",
   LOGIN_USER = "@USERS/LOGIN_USER",
+  QUICK_REGISTER_CUSTOMER = "@USERS/QUICK_REGISTER_CUSTOMER",
+  QUICK_REGISTER_ADMIN = "@USERS/QUICK_REGISTER_ADMIN",
 
   ADMIN = 'admin',
   CUSTOMER = 'customer',
@@ -48,11 +50,27 @@ export function logoutUser() {
   })
 }
 
+export function quickRegisterCustomer() {
+  return api(Constants.QUICK_REGISTER_CUSTOMER, {
+    url: 'users/quick_register_customer',
+    method: 'POST',
+  })
+}
+
+export function quickRegisterAdmin() {
+  return api(Constants.QUICK_REGISTER_ADMIN, {
+    url: 'users/quick_register_admin',
+    method: 'POST',
+  })
+}
+
 export type UsersState = {
   getUser: ApiReturn<User>
   storeUser: ApiReturn<any>
   logoutUser: ApiReturn<any>
   loginUser: ApiReturn<any>
+  quickRegisterCustomer: ApiReturn<any>
+  quickRegisterAdmin: ApiReturn<any>
 }
 
 export const reducers = {
@@ -60,4 +78,6 @@ export const reducers = {
   storeUser: apiReducer(Constants.STORE_USER),
   logoutUser: apiReducer(Constants.LOGOUT_USER),
   loginUser: apiReducer(Constants.LOGIN_USER),
+  quickRegisterCustomer: apiReducer(Constants.QUICK_REGISTER_CUSTOMER),
+  quickRegisterAdmin: apiReducer(Constants.QUICK_REGISTER_ADMIN),
 }

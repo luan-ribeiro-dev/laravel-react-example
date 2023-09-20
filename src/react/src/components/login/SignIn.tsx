@@ -1,22 +1,29 @@
 import React, { useEffect } from 'react'
 import { ConnectedProps, connect } from 'react-redux'
-import { loginUser } from '../../api/requests/users'
+import { loginUser, quickRegisterAdmin, quickRegisterCustomer } from '../../api/requests/users'
 import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { RootState } from '../../api/store/reducers';
 
 function mapStateToProps(state: RootState) {
   return {
-    loginUserState: state.users.loginUser
+    loginUserState: state.users.loginUser,
+    quickRegisterCustomerState: state.users.quickRegisterCustomer,
+    quickRegisterAdminState: state.users.quickRegisterAdmin,
   }
 }
 
-const mapDispatchToProps = {dispatchLoginUser: loginUser}
+const mapDispatchToProps = {
+  dispatchLoginUser: loginUser,
+  dispatchQuickRegisterCustomer: quickRegisterCustomer,
+  dispatchQuickRegisterAdmin: quickRegisterAdmin,
+}
+
 const connector = connect(mapStateToProps, mapDispatchToProps)
 type ReduxProps = ConnectedProps<typeof connector>
 type Props = ReduxProps
 
-function SignIn({loginUserState, dispatchLoginUser}: Props) {
+function SignIn({loginUserState, quickRegisterCustomerState, quickRegisterAdminState, dispatchLoginUser, dispatchQuickRegisterCustomer, dispatchQuickRegisterAdmin}: Props) {
   const [email, setEmail] = React.useState('')
   const [password, setPassword] = React.useState('')
 
@@ -27,6 +34,18 @@ function SignIn({loginUserState, dispatchLoginUser}: Props) {
     }
   }
 
+  const handleQuickRegisterCustomer = () => {
+    if (quickRegisterCustomerState.unstarted && quickRegisterAdminState.unstarted) {
+      dispatchQuickRegisterCustomer()
+    }
+  }
+  
+  const handleQuickRegisterAdmin = () => {
+    if (quickRegisterCustomerState.unstarted && quickRegisterAdminState.unstarted) {
+      dispatchQuickRegisterAdmin()
+    }
+  }
+
   useEffect(() => {
     if (loginUserState.succeeded) {
       window.location.href = 'dashboard'
@@ -34,6 +53,18 @@ function SignIn({loginUserState, dispatchLoginUser}: Props) {
       toast.error("Email or password is incorrect")
     }
   }, [loginUserState.status])
+
+  useEffect(() => {
+    if (quickRegisterAdminState.succeeded) {
+      window.location.href = '/dashboard'
+    }
+  }, [quickRegisterAdminState.status])
+
+  useEffect(() => {
+    if (quickRegisterCustomerState.succeeded) {
+      window.location.href = '/books'
+    }
+  }, [quickRegisterCustomerState.status])
 
   return (
     <React.Fragment>
@@ -55,13 +86,36 @@ function SignIn({loginUserState, dispatchLoginUser}: Props) {
           <div className="page-header min-vh-75">
             <div className="container">
               <div className="row">
-                <div className="col-xl-4 col-lg-5 col-md-6 d-flex flex-column mx-auto">
+                <div className="col-4 col-md-6 d-flex flex-column mx-auto">
                   <div className="card card-plain mt-8">
                     <div className="card-header pb-0 text-left bg-transparent">
                       <h3 className="font-weight-bolder text-info text-gradient">Welcome back</h3>
-                      <p className="mb-0">Enter your email and password to sign in</p>
+                      <h5>Sign in with</h5>
                     </div>
-                    <div className="card-body">
+                    <div className="row px-4">
+                      <div className="col-6">
+                        <button
+                          className="btn btn-primary w-100"
+                          onClick={handleQuickRegisterCustomer}
+                        >
+                          Quick sign in as a customer
+                        </button>
+                      </div>
+                      <div className="col-6">
+                        <button
+                          className="btn btn-primary w-100"
+                          onClick={handleQuickRegisterAdmin}
+                        >
+                          Quick sign in as a admin
+                        </button>
+                      </div>
+                      <div className="mt-2 position-relative text-center">
+                        <p className="text-sm font-weight-bold text-secondary text-border d-inline z-index-2 px-3">
+                          or
+                        </p>
+                      </div>
+                    </div>
+                    <div className="card-body pt-0">
                       <form role="form" onSubmit={handleSubmit}>
                         <label>Email</label>
                         <div className="mb-3">

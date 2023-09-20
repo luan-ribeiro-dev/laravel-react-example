@@ -3,7 +3,6 @@ import { ConnectedProps, connect } from 'react-redux'
 import { logoutUser } from '../../api/requests/users'
 import { Link, useNavigate } from 'react-router-dom';
 import Footer from '../shared/Footer';
-import Navbar from '../shared/Navbar';
 import { RootState } from '../../api/store/reducers';
 import { CartItem, setCart } from '../../api/requests/customer/books';
 
@@ -43,7 +42,7 @@ function AdminPanel({getUserState, logoutUserState, setCartState, dispatchLogout
 
   useEffect(() => {
     if (logoutUserState.succeeded) {
-      localStorage.removeItem('cart')
+      localStorage.clear()
       window.location.href = '/sign-in'
     }
   }, [logoutUserState.status])
