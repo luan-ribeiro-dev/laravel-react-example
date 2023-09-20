@@ -23,6 +23,8 @@ Route::middleware('auth:sanctum')->group(function () {
     
     // Admin routes
     Route::prefix('admin')->middleware('admin')->group(function () {
+        Route::get('reports', [\App\Http\Controllers\ReportController::class, 'index']);
+
         Route::post('books', [\App\Http\Controllers\BookController::class, 'store']);
         Route::put('books/{id}', [\App\Http\Controllers\BookController::class, 'update']);
         Route::delete('books/{id}', [\App\Http\Controllers\BookController::class, 'destroy']);
@@ -39,4 +41,6 @@ Route::group(['prefix' => 'users'], function () {
     Route::post('logout', [\App\Http\Controllers\AuthController::class, 'logout'])->middleware('auth:sanctum');
     Route::post('register', [\App\Http\Controllers\AuthController::class, 'register']);
     Route::post('login', [\App\Http\Controllers\AuthController::class, 'login']);
+    Route::post('quick_register_customer', [\App\Http\Controllers\AuthController::class, 'quickRegisterCustomer']);
+    Route::post('quick_register_admin', [\App\Http\Controllers\AuthController::class, 'quickRegisterAdmin']);
 });

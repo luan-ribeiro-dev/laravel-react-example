@@ -1,11 +1,11 @@
-import api, { ApiPagination, ApiReset, ApiReturn, apiReducer } from "../../.."
+import api, { ApiPagination, ApiReset, ApiReturn, apiReducer } from "../.."
 
 export enum Constants {
-  STORE_BOOK = "@BOOKS/ADMIN/STORE_BOOK",
-  GET_BOOKS = "@BOOKS/ADMIN/GET_BOOKS",
-  GET_BOOK = "@BOOKS/ADMIN/GET_BOOK",
-  DELETE_BOOK = "@BOOKS/ADMIN/DELETE_BOOK",
-  UPDATE_BOOK = "@BOOKS/ADMIN/UPDATE_BOOK",
+  STORE_BOOK = "@ADMIN/BOOKS/STORE_BOOK",
+  GET_BOOKS = "@ADMIN/BOOKS/GET_BOOKS",
+  GET_BOOK = "@ADMIN/BOOKS/GET_BOOK",
+  DELETE_BOOK = "@ADMIN/BOOKS/DELETE_BOOK",
+  UPDATE_BOOK = "@ADMIN/BOOKS/UPDATE_BOOK",
 }
 
 export type Book = {
