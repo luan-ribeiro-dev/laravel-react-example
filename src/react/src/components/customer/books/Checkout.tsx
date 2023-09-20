@@ -1,12 +1,12 @@
-import React, { useEffect } from 'react'
-import { ConnectedProps, connect } from 'react-redux'
-import { Link, useNavigate } from 'react-router-dom';
-import { CartItem, checkout, getBook, setCart } from '../../../api/requests/customer/books';
-import { RootState } from '../../../api/store/reducers';
-import CustomerPanel from '../CustomerPanel';
-import { toast } from 'react-toastify';
-import { isNull } from '../../../api/helpers';
-import { toMoney } from '../../../helper';
+import React, {useEffect} from 'react'
+import {ConnectedProps, connect} from 'react-redux'
+import {Link, useNavigate} from 'react-router-dom'
+import {CartItem, checkout, setCart} from '../../../api/requests/customer/books'
+import {RootState} from '../../../api/store/reducers'
+import CustomerPanel from '../CustomerPanel'
+import {toast} from 'react-toastify'
+import {isNull} from '../../../api/helpers'
+import {toMoney} from '../../../helper'
 
 const mapStateToProps = (state: RootState) => ({
   getBookState: state.customer.books.getBook,
@@ -23,7 +23,7 @@ type ReduxProps = ConnectedProps<typeof connector>
 type Props = ReduxProps
 
 function Checkout({checkoutState, dispatchSetCart, dispatchCheckout}: Props) {
-  const navigate = useNavigate();
+  const navigate = useNavigate()
   const [cart, setCart] = React.useState<CartItem[]>([])
 
   const handleQtyChange = (cartItem: CartItem, quantity: number) => {
@@ -46,7 +46,7 @@ function Checkout({checkoutState, dispatchSetCart, dispatchCheckout}: Props) {
 
   const handleDeleteCartItem = (cartItem: CartItem) => {
     const updatedCart = cart.filter((item: CartItem) => item.book.id !== cartItem.book.id)
-    
+
     setCart(updatedCart)
     dispatchSetCart(updatedCart)
     localStorage.setItem('cart', JSON.stringify(updatedCart))
@@ -80,7 +80,7 @@ function Checkout({checkoutState, dispatchSetCart, dispatchCheckout}: Props) {
 
   useEffect(() => {
     // Get cart from local storage and set it to state
-    let jsonCart = localStorage.getItem('cart')
+    const jsonCart = localStorage.getItem('cart')
     let cart = jsonCart ? JSON.parse(jsonCart) : []
     let isAboveStock = false
 
@@ -100,18 +100,18 @@ function Checkout({checkoutState, dispatchSetCart, dispatchCheckout}: Props) {
       toast.warning('Some items in your cart were above the stock limit and was adjusted to the maximum stock limit', {autoClose: 10000})
     }
   }, [])
-  
+
   return (
     <CustomerPanel
       title="Checkout"
       breadcrumb={[
         {
           name: 'Books',
-          link: '/books'
+          link: '/books',
         },
         {
           name: 'Checkout',
-          link: '/checkout'
+          link: '/checkout',
         },
       ]}
     >
@@ -154,14 +154,14 @@ function Checkout({checkoutState, dispatchSetCart, dispatchCheckout}: Props) {
                           </div>
                         </td>
                         <td className="align-baseline text-center text-sm">
-                          <input 
-                            type="number" 
+                          <input
+                            type="number"
                             className="form-control text-center m-auto"
                             defaultValue={cartItem.quantity}
                             onChange={e => {
                               if (e.target.value) {
                                 const value = parseInt(e.target.value)
-                                
+
                                 handleQtyChange(cartItem, value)
                                 if (cartItem.book.stock && value > cartItem.book.stock) {
                                   e.target.value = cartItem.book.stock.toString()
@@ -192,7 +192,7 @@ function Checkout({checkoutState, dispatchSetCart, dispatchCheckout}: Props) {
                           <span className="text-secondary text-xs font-weight-bold">{cartItem.book.price && toMoney(cartItem.book.price * cartItem.quantity)}</span>
                         </td>
                         <td className="align-baseline">
-                          <i 
+                          <i
                             className="fas fa-trash-alt text-secondary"
                             onClick={() => {
                               if (confirm(`Are you sure you want to remove the book "${cartItem.book.title}" from your cart?`)) {
@@ -214,8 +214,8 @@ function Checkout({checkoutState, dispatchSetCart, dispatchCheckout}: Props) {
 
               {/* Checkout button */}
               <div className="d-flex justify-content-end mt-3 px-3">
-                <button 
-                  className={`btn btn-primary btn-round btn-lg d-flex align-items-center justify-content-center w-100 ${cart.length === 0 ? 'cursor-not-allowed' : ''}`} 
+                <button
+                  className={`btn btn-primary btn-round btn-lg d-flex align-items-center justify-content-center w-100 ${cart.length === 0 ? 'cursor-not-allowed' : ''}`}
                   onClick={handleCheckout}
                   title={cart.length === 0 ? 'You cannot checkout. Your cart is empty' : undefined}
                 >

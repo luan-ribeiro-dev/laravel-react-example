@@ -1,9 +1,9 @@
-import React, { useEffect } from 'react'
-import { ConnectedProps, connect } from 'react-redux'
-import { Link } from 'react-router-dom';
-import AdminPanel from '../AdminPanel';
-import { Book, deleteBook, getBooks } from '../../../api/requests/admin/books';
-import { RootState } from '../../../api/store/reducers';
+import React, {useEffect} from 'react'
+import {ConnectedProps, connect} from 'react-redux'
+import {Link} from 'react-router-dom'
+import AdminPanel from '../AdminPanel'
+import {Book, deleteBook, getBooks} from '../../../api/requests/admin/books'
+import {RootState} from '../../../api/store/reducers'
 
 const mapStateToProps = (state: RootState) => ({
   getBooksState: state.admin.books.getBooks,
@@ -24,7 +24,7 @@ function Books({getBooksState, deleteBookState, dispatchGetBooks, dispatchDelete
 
   const handleDeleteBook = (book: Book) => {
     if (
-      book.id 
+      book.id
       && !deleteBookState.started
       && window.confirm(`Are you sure you want to delete the book '${book.title}'?`)
     ) {
@@ -49,7 +49,7 @@ function Books({getBooksState, deleteBookState, dispatchGetBooks, dispatchDelete
   return (
     <AdminPanel
       breadcrumb={[
-        {name: "Books", link: "books"}
+        {name: 'Books', link: 'books'},
       ]}
       title="Book list"
     >
@@ -64,7 +64,7 @@ function Books({getBooksState, deleteBookState, dispatchGetBooks, dispatchDelete
                 <div className="col-6 text-end">
                   <Link to="/books/new">
                     <button className="btn btn-primary btn-sm mb-0">
-                      <i className="fa fa-plus me-2"></i> 
+                      <i className="fa fa-plus me-2"></i>
                       <span className="pt-1">Add new book</span>
                     </button>
                   </Link>
@@ -87,7 +87,7 @@ function Books({getBooksState, deleteBookState, dispatchGetBooks, dispatchDelete
                   <tbody className="ps-4">
                     {books?.map((book, index) => (
                       <tr key={`admin-book-tr-${index}`}>
-                        <td className="py-3" style={{maxWidth: "150px"}}>
+                        <td className="py-3" style={{maxWidth: '150px'}}>
                           <h6 className="mb-0 text-sm text-truncate">{book.title}</h6>
                         </td>
                         <td className="py-3">

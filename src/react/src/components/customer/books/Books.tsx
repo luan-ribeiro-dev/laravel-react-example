@@ -1,12 +1,11 @@
-import React, { useEffect } from 'react'
-import { ConnectedProps, connect } from 'react-redux'
-import { Link } from 'react-router-dom';
-import { Book, CartItem, getBooks, setCart } from '../../../api/requests/customer/books';
-import { RootState } from '../../../api/store/reducers';
-import Navbar from '../../shared/Navbar';
-import CustomerPanel from '../CustomerPanel';
-import { toast } from 'react-toastify';
-import { toMoney } from '../../../helper';
+import React, {useEffect} from 'react'
+import {ConnectedProps, connect} from 'react-redux'
+import {Link} from 'react-router-dom'
+import {Book, CartItem, getBooks, setCart} from '../../../api/requests/customer/books'
+import {RootState} from '../../../api/store/reducers'
+import CustomerPanel from '../CustomerPanel'
+import {toast} from 'react-toastify'
+import {toMoney} from '../../../helper'
 
 const mapStateToProps = (state: RootState) => ({
   getBooksState: state.customer.books.getBooks,
@@ -50,15 +49,14 @@ function Books({getBooksState, setCartState, dispatchGetBooks, dispatchSetCart}:
     }
   }, [getBooksState.status])
 
-
   return (
     <CustomerPanel
       title="Books"
       breadcrumb={[
         {
           name: 'Books',
-          link: '/books'
-        }
+          link: '/books',
+        },
       ]}
     >
       <div className="row justify-content-around">
@@ -91,8 +89,8 @@ function Books({getBooksState, setCartState, dispatchGetBooks, dispatchSetCart}:
 
                 {/* Add to the cart button */}
                 <div className="d-flex align-items-center">
-                  <button 
-                    className="btn btn-primary btn-round btn-sm d-flex align-items-center justify-content-center w-100" 
+                  <button
+                    className="btn btn-primary btn-round btn-sm d-flex align-items-center justify-content-center w-100"
                     onClick={() => addToCart(book)}
                   >
                     <i className="fas fa-shopping-cart pe-2"></i> Add to Cart

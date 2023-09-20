@@ -1,14 +1,14 @@
-import React, { useEffect } from 'react'
-import { ConnectedProps, connect } from 'react-redux'
-import { Constants as UserConstants, User, getUser } from './api/requests/users'
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
-import { RootState } from './api/store/reducers'
-import { adminRoutes, customerRoutes, publicRoutes } from './routes';
-import { ToastContainer } from 'react-toastify'
+import React, {useEffect} from 'react'
+import {ConnectedProps, connect} from 'react-redux'
+import {Constants as UserConstants, getUser} from './api/requests/users'
+import {BrowserRouter, Routes, Route, Navigate} from 'react-router-dom'
+import {RootState} from './api/store/reducers'
+import {adminRoutes, customerRoutes, publicRoutes} from './routes'
+import {ToastContainer} from 'react-toastify'
 
 function mapStateToProps(state: RootState) {
   return {
-    getUserState: state.users.getUser
+    getUserState: state.users.getUser,
   }
 }
 
@@ -29,23 +29,23 @@ const Router = ({getUserState, dispatchGetUser}: Props) => {
     <BrowserRouter>
       <Routes>
         {getUserState.succeeded && user?.role === UserConstants.ADMIN && (
-            <React.Fragment>
-              {adminRoutes.map((route, index) => (
-                <Route key={`admin-route-${index}`} {...route} />
-              ))}
-              <Route path="*" element={<Navigate to="/dashboard" />} />
-            </React.Fragment>
-          )
+          <React.Fragment>
+            {adminRoutes.map((route, index) => (
+              <Route key={`admin-route-${index}`} {...route} />
+            ))}
+            <Route path="*" element={<Navigate to="/dashboard" />} />
+          </React.Fragment>
+        )
         }
-               
+
         {getUserState.succeeded && user?.role === UserConstants.CUSTOMER && (
-            <React.Fragment>
-              {customerRoutes.map((route, index) => (
-                <Route key={`customer-route-${index}`} {...route} />
-              ))}
-              <Route path="*" element={<Navigate to="/books" />} />
-            </React.Fragment>
-          )
+          <React.Fragment>
+            {customerRoutes.map((route, index) => (
+              <Route key={`customer-route-${index}`} {...route} />
+            ))}
+            <Route path="*" element={<Navigate to="/books" />} />
+          </React.Fragment>
+        )
         }
 
         {getUserState.failed && (
@@ -65,7 +65,7 @@ function App(props: Props) {
   return (
     <React.Fragment>
       <Router {...props} />
-        
+
       <ToastContainer
         position="bottom-right"
         autoClose={5000}

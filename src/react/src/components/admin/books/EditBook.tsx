@@ -1,11 +1,10 @@
-import React, { useEffect } from 'react'
-import { ConnectedProps, connect } from 'react-redux'
-import { RootState } from '../../../api/store/reducers';
-import { useNavigate, useParams } from 'react-router-dom';
-import AdminPanel from '../AdminPanel';
-import { Book, getBook, getBooks, updateBook } from '../../../api/requests/admin/books';
-import { InputValidation } from '../../helpers';
-import { isNull } from '../../../api/helpers';
+import React, {useEffect} from 'react'
+import {ConnectedProps, connect} from 'react-redux'
+import {RootState} from '../../../api/store/reducers'
+import {useNavigate, useParams} from 'react-router-dom'
+import AdminPanel from '../AdminPanel'
+import {Book, getBook, getBooks, updateBook} from '../../../api/requests/admin/books'
+import {InputValidation} from '../../helpers'
 
 function mapStateToProps(state: RootState) {
   return {
@@ -99,10 +98,10 @@ function CreateBook({getBookState, updateBookState, dispatchUpdateBook, dispatch
 
   return (
     <AdminPanel
-      title={`Edit book`}
+      title={'Edit book'}
       breadcrumb={[
         {name: 'Books', link: '/books'},
-        {name: 'Edit book', link: `/books/${bookId}`}
+        {name: 'Edit book', link: `/books/${bookId}`},
       ]}
     >
       <div className="row">
@@ -121,7 +120,7 @@ function CreateBook({getBookState, updateBookState, dispatchUpdateBook, dispatch
                       <label className="form-label">Title</label>
                       <InputValidation
                         onChange={(e: React.ChangeEvent<HTMLInputElement>) => setTitle(e.target.value)}
-                        value={title || ""}
+                        value={title || ''}
                         reduxState={updateBookState}
                         field="title"
                         type="text"
@@ -137,13 +136,13 @@ function CreateBook({getBookState, updateBookState, dispatchUpdateBook, dispatch
                       <label className="form-label">Description</label>
                       <InputValidation
                         onChange={(e: React.ChangeEvent<HTMLInputElement>) => setDescription(e.target.value)}
-                        value={description || ""}
+                        value={description || ''}
                         reduxState={updateBookState}
                         field="description"
                         isTextarea={true}
                         className="form-control"
                         placeholder="Ex. Frodo, a Christlike figure, learns that the ring has the power to control the entire world and, he discovers, to corrupt its owner. A fellowship of hobbits, elves, dwarfs, and men is formed to destroy the ring by casting it into the volcanic fires of the Crack of Doom, where it was forged..."
-                        rows={4} 
+                        rows={4}
                       />
                     </div>
                   </div>
@@ -154,7 +153,7 @@ function CreateBook({getBookState, updateBookState, dispatchUpdateBook, dispatch
                       <label className="form-label">Author</label>
                       <InputValidation
                         onChange={(e: React.ChangeEvent<HTMLInputElement>) => setAuthor(e.target.value)}
-                        value={author || ""}
+                        value={author || ''}
                         reduxState={updateBookState}
                         field="author"
                         type="text"
@@ -170,7 +169,7 @@ function CreateBook({getBookState, updateBookState, dispatchUpdateBook, dispatch
                       <label className="form-label">Publisher</label>
                       <InputValidation
                         onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPublisher(e.target.value)}
-                        value={publisher || ""}
+                        value={publisher || ''}
                         reduxState={updateBookState}
                         field="publisher"
                         type="text"
@@ -186,7 +185,7 @@ function CreateBook({getBookState, updateBookState, dispatchUpdateBook, dispatch
                       <label className="form-label">Publish date</label>
                       <InputValidation
                         onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPublishDate(e.target.value)}
-                        value={publishDate || ""}
+                        value={publishDate || ''}
                         reduxState={updateBookState}
                         field="publish_at"
                         type="date"
@@ -202,7 +201,7 @@ function CreateBook({getBookState, updateBookState, dispatchUpdateBook, dispatch
                       <label className="form-label">ISBN</label>
                       <InputValidation
                         onChange={(e: React.ChangeEvent<HTMLInputElement>) => setIsbn(e.target.value)}
-                        value={isbn || ""}
+                        value={isbn || ''}
                         reduxState={updateBookState}
                         field="isbn"
                         type="text"
@@ -218,7 +217,7 @@ function CreateBook({getBookState, updateBookState, dispatchUpdateBook, dispatch
                       <label className="form-label">Genre</label>
                       <InputValidation
                         onChange={(e: React.ChangeEvent<HTMLInputElement>) => setGenre(e.target.value)}
-                        value={genre || ""}
+                        value={genre || ''}
                         reduxState={updateBookState}
                         field="genre"
                         type="text"
@@ -234,7 +233,7 @@ function CreateBook({getBookState, updateBookState, dispatchUpdateBook, dispatch
                       <label className="form-label">Language</label>
                       <InputValidation
                         onChange={(e: React.ChangeEvent<HTMLInputElement>) => setLanguage(e.target.value)}
-                        value={language || ""}
+                        value={language || ''}
                         reduxState={updateBookState}
                         field="language"
                         type="text"
@@ -250,7 +249,7 @@ function CreateBook({getBookState, updateBookState, dispatchUpdateBook, dispatch
                       <label className="form-label">Format</label>
                       <InputValidation
                         onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormat(e.target.value)}
-                        value={format || ""}
+                        value={format || ''}
                         reduxState={updateBookState}
                         field="format"
                         type="text"
@@ -266,7 +265,7 @@ function CreateBook({getBookState, updateBookState, dispatchUpdateBook, dispatch
                       <label className="form-label">Pages</label>
                       <InputValidation
                         onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPages(e.target.value ? parseInt(e.target.value) : 0)}
-                        value={pages || ""}
+                        value={pages || ''}
                         reduxState={updateBookState}
                         field="pages"
                         type="number"
@@ -280,18 +279,18 @@ function CreateBook({getBookState, updateBookState, dispatchUpdateBook, dispatch
                   <div className="col-12 col-sm-6 col-md-4">
                     <div className="form-group">
                       <label className="form-label">Price</label>
-                        <InputValidation
-                          onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPrice(e.target.value ? parseFloat(e.target.value) : 0)}
-                          value={price || ""}
-                          reduxState={updateBookState}
-                          field="price"
-                          type="number"
-                          className="form-control"
-                          placeholder="Ex. $10.99" 
-                          min={0.1}
-                          max={999999.99}
-                          step={0.01}
-                        />
+                      <InputValidation
+                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPrice(e.target.value ? parseFloat(e.target.value) : 0)}
+                        value={price || ''}
+                        reduxState={updateBookState}
+                        field="price"
+                        type="number"
+                        className="form-control"
+                        placeholder="Ex. $10.99"
+                        min={0.1}
+                        max={999999.99}
+                        step={0.01}
+                      />
                     </div>
                   </div>
 
@@ -301,7 +300,7 @@ function CreateBook({getBookState, updateBookState, dispatchUpdateBook, dispatch
                       <label className="form-label">Stock</label>
                       <InputValidation
                         onChange={(e: React.ChangeEvent<HTMLInputElement>) => setStock(e.target.value ? parseInt(e.target.value) : 0)}
-                        value={stock || ""}
+                        value={stock || ''}
                         reduxState={updateBookState}
                         field="stock"
                         type="number"

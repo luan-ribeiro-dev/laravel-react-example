@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from 'react'
-import { ConnectedProps, connect } from 'react-redux'
-import { quickRegisterAdmin, quickRegisterCustomer, storeUser } from '../../api/requests/users'
-import { Link } from 'react-router-dom';
-import { InputValidation } from '../helpers';
-import { RootState } from '../../api/store/reducers';
+import React, {useEffect, useState} from 'react'
+import {ConnectedProps, connect} from 'react-redux'
+import {quickRegisterAdmin, quickRegisterCustomer, storeUser} from '../../api/requests/users'
+import {Link} from 'react-router-dom'
+import {InputValidation} from '../helpers'
+import {RootState} from '../../api/store/reducers'
 
 function mapStateToProps(state: RootState) {
   return {
@@ -24,7 +24,6 @@ type ReduxProps = ConnectedProps<typeof connector>
 type Props = ReduxProps
 
 function SignUp({storeUserState, quickRegisterCustomerState, quickRegisterAdminState, dispatchStoreUser, dispatchQuickRegisterCustomer, dispatchQuickRegisterAdmin}: Props) {
-
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -42,7 +41,7 @@ function SignUp({storeUserState, quickRegisterCustomerState, quickRegisterAdminS
       dispatchQuickRegisterCustomer()
     }
   }
-  
+
   const handleQuickRegisterAdmin = () => {
     if (quickRegisterCustomerState.unstarted && quickRegisterAdminState.unstarted) {
       dispatchQuickRegisterAdmin()
@@ -78,7 +77,7 @@ function SignUp({storeUserState, quickRegisterCustomerState, quickRegisterAdminS
         </div>
       </nav>
       <section className="min-vh-100 mb-8">
-        <div className="page-header align-items-start min-vh-50 pt-5 pb-11 m-3 border-radius-lg" style={{backgroundImage: "url('/assets/img/curved-images/curved14.jpg')"}}>
+        <div className="page-header align-items-start min-vh-50 pt-5 pb-11 m-3 border-radius-lg" style={{backgroundImage: 'url(\'/assets/img/curved-images/curved14.jpg\')'}}>
           <span className="mask bg-gradient-dark opacity-6"></span>
           <div className="container">
             <div className="row justify-content-center">
@@ -130,7 +129,7 @@ function SignUp({storeUserState, quickRegisterCustomerState, quickRegisterAdminS
                         placeholder="Name"
                         aria-label="Name"
                         aria-describedby="email-addon"
-                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setName(e.target.value)} 
+                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setName(e.target.value)}
                         required
                       />
                     </div>
@@ -143,8 +142,8 @@ function SignUp({storeUserState, quickRegisterCustomerState, quickRegisterAdminS
                         placeholder="Email"
                         aria-label="Email"
                         aria-describedby="email-addon"
-                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)} 
-                        required 
+                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)}
+                        required
                       />
                     </div>
                     <div className="mb-3">
@@ -169,7 +168,7 @@ function SignUp({storeUserState, quickRegisterCustomerState, quickRegisterAdminS
                     <div className="text-center">
                       <button type="submit" className="btn bg-gradient-dark w-100 my-4 mb-2">Sign up</button>
                     </div>
-                    <p className="text-sm mt-3 mb-0">Already have an account? <Link className="text-dark font-weight-bolder" to={"/sign-in"}>Sign in</Link></p>
+                    <p className="text-sm mt-3 mb-0">Already have an account? <Link className="text-dark font-weight-bolder" to={'/sign-in'}>Sign in</Link></p>
                   </form>
                 </div>
               </div>

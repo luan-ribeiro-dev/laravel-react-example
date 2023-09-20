@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from 'react'
-import { ConnectedProps, connect } from 'react-redux'
-import { logoutUser } from '../../api/requests/users'
-import { Link } from 'react-router-dom';
-import Footer from '../shared/Footer';
-import { RootState } from '../../api/store/reducers';
+import React, {useEffect, useState} from 'react'
+import {ConnectedProps, connect} from 'react-redux'
+import {logoutUser} from '../../api/requests/users'
+import {Link} from 'react-router-dom'
+import Footer from '../shared/Footer'
+import {RootState} from '../../api/store/reducers'
 
 function mapStateToProps(state: RootState) {
   return {
@@ -25,9 +25,9 @@ type Props = ReduxProps & {
 }
 
 function AdminPanel({getUserState, logoutUserState, dispatchLogoutUser, breadcrumb, title, children}: Props) {
-  const slug = window.location.pathname.substring(1);
-  const isDashboard = slug == "dashboard";
-  const isDesktopView = window.innerWidth >= 1200;
+  const slug = window.location.pathname.substring(1)
+  const isDashboard = slug == 'dashboard'
+  const isDesktopView = window.innerWidth >= 1200
 
   const [userName, setUserName] = useState('')
   const [isSidebarOpen, setIsSidebarOpen] = useState(localStorage.getItem('isSidebarOpen') === 'true')
@@ -61,8 +61,8 @@ function AdminPanel({getUserState, logoutUserState, dispatchLogoutUser, breadcru
       <div className={`g-sidenav-show ${isSidebarOpen ? 'g-sidenav-pinned' : ''}`}>
         <aside className="sidenav navbar navbar-vertical navbar-expand-xs border-0 border-radius-xl my-3 fixed-start ms-3 bg-white" id="sidenav-main">
           <div className="sidenav-header">
-            <i className={`fas fa-times p-3 cursor-pointer text-secondary opacity-5 position-absolute end-0 top-0 ${isDesktopView ? "d-none d-xl-none" : ""}`} aria-hidden="true" onClick={() => handleSidebarOpen(false)}></i>
-            <a className="navbar-brand m-0" href="https://demos.creative-tim.com/soft-ui-dashboard/pages/dashboard.html" target="_blank">
+            <i className={`fas fa-times p-3 cursor-pointer text-secondary opacity-5 position-absolute end-0 top-0 ${isDesktopView ? 'd-none d-xl-none' : ''}`} aria-hidden="true" onClick={() => handleSidebarOpen(false)}></i>
+            <a className="navbar-brand m-0" href="https://demos.creative-tim.com/soft-ui-dashboard/pages/dashboard.html" target="_blank" rel="noreferrer">
               <img src="../assets/img/logo-ct.png" className="navbar-brand-img h-100" alt="main_logo" />
               <span className="ms-1 font-weight-bold">Fake Bookstore example</span>
             </a>
@@ -71,7 +71,7 @@ function AdminPanel({getUserState, logoutUserState, dispatchLogoutUser, breadcru
           <div className="collapse navbar-collapse  w-auto " id="sidenav-collapse-main">
             <ul className="navbar-nav">
               <li className="nav-item">
-                <Link className={`nav-link ${isDashboard && "active"}`} to="/dashboard">
+                <Link className={`nav-link ${isDashboard && 'active'}`} to="/dashboard">
                   <div className="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
                     <svg width="12px" height="12px" viewBox="0 0 45 40" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink">
                       <title>shop </title>
@@ -91,7 +91,7 @@ function AdminPanel({getUserState, logoutUserState, dispatchLogoutUser, breadcru
                 </Link>
               </li>
               <li className="nav-item">
-                <Link className={`nav-link ${!isDashboard && "active"}`} to="/books">
+                <Link className={`nav-link ${!isDashboard && 'active'}`} to="/books">
                   <div className="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
                     <svg width="12px" height="12px" viewBox="0 0 42 42" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink">
                       <title>office</title>
@@ -113,15 +113,15 @@ function AdminPanel({getUserState, logoutUserState, dispatchLogoutUser, breadcru
             </ul>
           </div>
         </aside>
-      
-        <main className={`main-content position-relative max-height-vh-100 h-100 mt-1 border-radius-lg`}>
-          <nav className="navbar navbar-main navbar-expand-lg px-0 mx-4 shadow-none border-radius-xl" id="navbarBlur" navbar-scroll="true">
+
+        <main className={'main-content position-relative max-height-vh-100 h-100 mt-1 border-radius-lg'}>
+          <nav className="navbar navbar-main navbar-expand-lg px-0 mx-4 shadow-none border-radius-xl" id="navbarBlur">
             <div className="container-fluid py-1 px-3">
               <nav aria-label="breadcrumb">
                 <ol className="breadcrumb bg-transparent mb-0 pb-0 pt-1 px-0 me-sm-6 me-5">
                   {breadcrumb.map((item, index) => {
                     return (
-                      <li className={`breadcrumb-item text-sm ${index === breadcrumb.length - 1 ? "text-dark active" : ""}`} key={`breadcrumb-${item.name}`}>
+                      <li className={`breadcrumb-item text-sm ${index === breadcrumb.length - 1 ? 'text-dark active' : ''}`} key={`breadcrumb-${item.name}`}>
                         <Link to={item.link} className="opacity-5 text-dark">{item.name}</Link>
                       </li>
                     )

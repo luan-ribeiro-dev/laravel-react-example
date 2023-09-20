@@ -1,11 +1,10 @@
-import React, { useEffect } from 'react'
-import { ConnectedProps, connect } from 'react-redux'
-import { RootState } from '../../../api/store/reducers';
-import { useNavigate } from 'react-router-dom';
-import AdminPanel from '../AdminPanel';
-import { Book, getBooks, storeBook } from '../../../api/requests/admin/books';
-import { InputValidation } from '../../helpers';
-import { isNull } from '../../../api/helpers';
+import React, {useEffect} from 'react'
+import {ConnectedProps, connect} from 'react-redux'
+import {RootState} from '../../../api/store/reducers'
+import {useNavigate} from 'react-router-dom'
+import AdminPanel from '../AdminPanel'
+import {Book, getBooks, storeBook} from '../../../api/requests/admin/books'
+import {InputValidation} from '../../helpers'
 
 function mapStateToProps(state: RootState) {
   return {
@@ -78,9 +77,6 @@ function CreateBook({storeBookState, dispatchStoreBook, dispatchGetBooks}: Props
           <div className="card">
             <div className="card-header pb-3 pt-3 border-bottom d-flex justify-content-between">
               <h6 className="mb-0">Book details</h6>
-              <button className="btn btn-primary btn-sm mb-0">
-                <span className="pt-1">Save</span>
-              </button>
             </div>
             <div className="card-body pb-2">
               {/* Create a book form */}
@@ -112,7 +108,7 @@ function CreateBook({storeBookState, dispatchStoreBook, dispatchGetBooks}: Props
                         isTextarea={true}
                         className="form-control"
                         placeholder="Ex. Frodo, a Christlike figure, learns that the ring has the power to control the entire world and, he discovers, to corrupt its owner. A fellowship of hobbits, elves, dwarfs, and men is formed to destroy the ring by casting it into the volcanic fires of the Crack of Doom, where it was forged..."
-                        rows={4} 
+                        rows={4}
                       />
                     </div>
                   </div>
@@ -241,17 +237,17 @@ function CreateBook({storeBookState, dispatchStoreBook, dispatchGetBooks}: Props
                   <div className="col-12 col-sm-6 col-md-4">
                     <div className="form-group">
                       <label className="form-label">Price</label>
-                        <InputValidation
-                          onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPrice(parseFloat(e.target.value))}
-                          reduxState={storeBookState}
-                          field="price"
-                          type="number"
-                          className="form-control"
-                          placeholder="Ex. $10.99" 
-                          min={0.1}
-                          max={999999.99}
-                          step={0.01}
-                        />
+                      <InputValidation
+                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPrice(parseFloat(e.target.value))}
+                        reduxState={storeBookState}
+                        field="price"
+                        type="number"
+                        className="form-control"
+                        placeholder="Ex. $10.99"
+                        min={0.1}
+                        max={999999.99}
+                        step={0.01}
+                      />
                     </div>
                   </div>
 

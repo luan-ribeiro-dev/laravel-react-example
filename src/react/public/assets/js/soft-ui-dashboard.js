@@ -371,10 +371,6 @@ setTimeout(function() {
   }
 
   function toggleSidenav() {
-    console.log(body)
-    console.log(body.classList)
-    console.log(sidenav)
-    console.log(iconSidenav)
     if (body.classList.contains(className)) {
       body.classList.remove(className);
       setTimeout(function() {

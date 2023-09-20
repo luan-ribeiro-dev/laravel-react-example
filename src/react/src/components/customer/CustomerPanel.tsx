@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from 'react'
-import { ConnectedProps, connect } from 'react-redux'
-import { logoutUser } from '../../api/requests/users'
-import { Link, useNavigate } from 'react-router-dom';
-import Footer from '../shared/Footer';
-import { RootState } from '../../api/store/reducers';
-import { CartItem, setCart } from '../../api/requests/customer/books';
+import React, {useEffect, useState} from 'react'
+import {ConnectedProps, connect} from 'react-redux'
+import {logoutUser} from '../../api/requests/users'
+import {Link} from 'react-router-dom'
+import Footer from '../shared/Footer'
+import {RootState} from '../../api/store/reducers'
+import {CartItem, setCart} from '../../api/requests/customer/books'
 
 function mapStateToProps(state: RootState) {
   return {
@@ -52,7 +52,7 @@ function AdminPanel({getUserState, logoutUserState, setCartState, dispatchLogout
       setUserName(getUserState.data.name)
     }
   }, [getUserState.status])
-  
+
   useEffect(() => {
     if (setCartState.unstarted) {
       const cart = localStorage.getItem('cart')
@@ -63,10 +63,10 @@ function AdminPanel({getUserState, logoutUserState, setCartState, dispatchLogout
   return (
     <React.Fragment>
       <main className="main-content position-relative max-height-vh-100 h-100 mt-1 border-radius-lg ">
-        <nav className="navbar navbar-main navbar-expand px-0 mx-4 shadow-none border-radius-xl" id="navbarBlur" navbar-scroll="true">
+        <nav className="navbar navbar-main navbar-expand px-0 mx-4 shadow-none border-radius-xl" id="navbarBlur">
           <div className="container-fluid py-1 px-3">
             <div className="navbar-collapse mt-sm-0 mt-2 me-md-0 me-sm-4" id="navbar">
-              <Link to={"/books"}><strong>Shop for fake books</strong></Link>
+              <Link to={'/books'}><strong>Shop for fake books</strong></Link>
               <div className="ms-md-auto pe-md-3 d-flex align-items-center">
               </div>
               <ul className="navbar-nav justify-content-end">
@@ -78,7 +78,7 @@ function AdminPanel({getUserState, logoutUserState, setCartState, dispatchLogout
                 <li className="nav-item d-flex align-items-center">
                   <div className="nav-link text-body p-0">
                     {/* Add a cart number icon in fa-shopping-cart */}
-                    <Link to={"/checkout"}>
+                    <Link to={'/checkout'}>
                       <i className="fas fa-shopping-cart fixed-plugin-button-nav cursor-pointer text-lg ps-3">
                         {cart && cart.length > 0 && <span className="badge bg-primary rounded-pill p-1">{cart.reduce((acc: number, cartItem: CartItem) => acc + cartItem.quantity, 0)}</span>}
                       </i>
@@ -96,7 +96,7 @@ function AdminPanel({getUserState, logoutUserState, setCartState, dispatchLogout
             <ol className="breadcrumb bg-transparent mb-0 pb-0 pt-1 px-0 me-sm-6 me-5">
               {breadcrumb.map((item, index) => {
                 return (
-                  <li className={`breadcrumb-item text-sm ${index === breadcrumb.length - 1 ? "text-dark active" : ""}`} key={`breadcrumb-${item.name}`}>
+                  <li className={`breadcrumb-item text-sm ${index === breadcrumb.length - 1 ? 'text-dark active' : ''}`} key={`breadcrumb-${item.name}`}>
                     <Link to={item.link} className="opacity-5 text-dark">{item.name}</Link>
                   </li>
                 )

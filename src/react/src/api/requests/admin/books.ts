@@ -1,11 +1,11 @@
-import api, { ApiPagination, ApiReset, ApiReturn, apiReducer } from "../.."
+import api, {ApiPagination, ApiReset, ApiReturn, apiReducer} from '../..'
 
 export enum Constants {
-  STORE_BOOK = "@ADMIN/BOOKS/STORE_BOOK",
-  GET_BOOKS = "@ADMIN/BOOKS/GET_BOOKS",
-  GET_BOOK = "@ADMIN/BOOKS/GET_BOOK",
-  DELETE_BOOK = "@ADMIN/BOOKS/DELETE_BOOK",
-  UPDATE_BOOK = "@ADMIN/BOOKS/UPDATE_BOOK",
+  STORE_BOOK = '@ADMIN/BOOKS/STORE_BOOK',
+  GET_BOOKS = '@ADMIN/BOOKS/GET_BOOKS',
+  GET_BOOK = '@ADMIN/BOOKS/GET_BOOK',
+  DELETE_BOOK = '@ADMIN/BOOKS/DELETE_BOOK',
+  UPDATE_BOOK = '@ADMIN/BOOKS/UPDATE_BOOK',
 }
 
 export type Book = {
@@ -29,7 +29,7 @@ export function storeBook(data: Book | ApiReset) {
     url: 'admin/books',
     method: 'POST',
     data,
-    enableToast: true
+    enableToast: true,
   })
 }
 
@@ -53,7 +53,7 @@ export function deleteBook(id: number) {
   return api(Constants.DELETE_BOOK, {
     url: `admin/books/${id}`,
     method: 'DELETE',
-    enableToast: true
+    enableToast: true,
   })
 }
 
@@ -62,16 +62,16 @@ export function updateBook(data: Book | ApiReset) {
     url: `admin/books/${'id' in data && data?.id}`,
     method: 'PUT',
     data,
-    enableToast: true
+    enableToast: true,
   })
 }
 
 export type BookState = {
-  storeBook: ApiReturn<any>
+  storeBook: ApiReturn<boolean>
   getBooks: ApiReturn<ApiPagination<Book>>
   getBook: ApiReturn<Book>
-  deleteBook: ApiReturn<any>
-  updateBook: ApiReturn<any>
+  deleteBook: ApiReturn<boolean>
+  updateBook: ApiReturn<boolean>
 }
 
 export const reducers = {

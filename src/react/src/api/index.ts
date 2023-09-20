@@ -1,20 +1,20 @@
-import { AxiosRequestConfig } from "axios"
-import { Action, ActionCreator, Dispatch } from "redux"
-import { handleError } from "./helpers"
-import axios from "../axios"
-import { toast } from "react-toastify"
+import {AxiosRequestConfig} from 'axios'
+import {Action, ActionCreator, Dispatch} from 'redux'
+import {handleError} from './helpers'
+import axios from '../axios'
+import {toast} from 'react-toastify'
 
 enum APIConstants {
-  UNSTARTED = "UNSTARTED",
-  STARTED = "STARTED",
-  SUCCEEDED = "SUCCEEDED",
-  FAILED = "FAILED",
-  CONSTANT = "CONSTANT",
+  UNSTARTED = 'UNSTARTED',
+  STARTED = 'STARTED',
+  SUCCEEDED = 'SUCCEEDED',
+  FAILED = 'FAILED',
+  CONSTANT = 'CONSTANT',
 }
 
 export enum APIErrors {
-  VALIDATION = "VALIDATION",
-  UNKNOWN = "UNKNOWN",
+  VALIDATION = 'VALIDATION',
+  UNKNOWN = 'UNKNOWN',
 }
 
 type ApiOptions<T> = {
@@ -42,9 +42,9 @@ export type ApiReturn<T> = {
   },
 }
 
-export type ApiAction = Action & {
+type ApiAction<T> = Action & {
   status: APIConstants
-  data?: any
+  data?: T
   error?: Error
 }
 
@@ -60,7 +60,7 @@ export type ApiPagination<T> = {
 }
 
 export function apiReducer<T>(type?: string): ActionCreator<ApiReturn<T>> {
-  return (state = {status: APIConstants.UNSTARTED, unstarted: true}, action: ApiAction) => {
+  return (state = {status: APIConstants.UNSTARTED, unstarted: true}, action: ApiAction<T>) => {
     if (action.type === type) {
       const apiStatus = {
         status: action.status,
@@ -71,24 +71,24 @@ export function apiReducer<T>(type?: string): ActionCreator<ApiReturn<T>> {
         constant: action.status === APIConstants.CONSTANT,
       }
       switch (action.status) {
-        case APIConstants.UNSTARTED:
-        case APIConstants.STARTED:
-          return apiStatus
-        case APIConstants.CONSTANT:
-        case APIConstants.SUCCEEDED:
-          return {
-            ...apiStatus,
-            data: action.data
-          }
-        case APIConstants.FAILED:
-          return {
-            ...apiStatus,
-            error: action.error ? handleError(action.error) : new Error("Unknown error")
-          }
-        default:
-          return state
+      case APIConstants.UNSTARTED:
+      case APIConstants.STARTED:
+        return apiStatus
+      case APIConstants.CONSTANT:
+      case APIConstants.SUCCEEDED:
+        return {
+          ...apiStatus,
+          data: action.data,
+        }
+      case APIConstants.FAILED:
+        return {
+          ...apiStatus,
+          error: action.error ? handleError(action.error) : new Error('Unknown error'),
+        }
+      default:
+        return state
       }
-    } 
+    }
     return state
   }
 }
@@ -96,23 +96,23 @@ export function apiReducer<T>(type?: string): ActionCreator<ApiReturn<T>> {
 export default function api<T>(type:string, {url = '', method = '', enableToast = false, ...options}: ApiOptions<T>) {
   return async (dispatch: Dispatch) => {
     if (
-      options.data 
-      && typeof options.data == "object" 
-      && 'reset' in options.data 
+      options.data
+      && typeof options.data == 'object'
+      && 'reset' in options.data
       && options.data.reset
     ) {
       dispatch({
         type,
-        status: APIConstants.UNSTARTED
+        status: APIConstants.UNSTARTED,
       })
       return Promise.resolve()
     }
-    
-    const toastId = enableToast ? toast("Please wait...", {isLoading: true}) : null
+
+    const toastId = enableToast ? toast('Please wait...', {isLoading: true}) : null
 
     dispatch({
       type,
-      status: APIConstants.STARTED
+      status: APIConstants.STARTED,
     })
 
     if (!url && !method) {
@@ -123,39 +123,39 @@ export default function api<T>(type:string, {url = '', method = '', enableToast 
       })
       return Promise.resolve()
     }
-    
-    const AxiosOptions: AxiosRequestConfig = {url,method}
+
+    const AxiosOptions: AxiosRequestConfig = {url, method}
 
     if (options.data) {
       AxiosOptions.data = options.data
     }
 
-    await axios.get("sanctum/csrf-cookie")
+    await axios.get('sanctum/csrf-cookie')
 
     axios(AxiosOptions).then((res) => {
-      console.log("api response: ", res)
+      console.log('api response: ', res)
 
       if (toastId) {
-        toast.update(toastId, {render: "Success!", type: "success", isLoading: false, autoClose: 5000})
+        toast.update(toastId, {render: 'Success!', type: 'success', isLoading: false, autoClose: 5000})
       }
 
       dispatch({
         type,
         status: APIConstants.SUCCEEDED,
-        data: res.data
+        data: res.data,
       })
     }).catch(error => {
       if (toastId) {
         const err = handleError(error)
-        const isValidationError = "type" in err && err.type === APIErrors.VALIDATION
-        const message = isValidationError ? "Validation Error!" : "Error!"
-        
-        toast.update(toastId, {render: message, type: "error", isLoading: false, autoClose: 5000})
+        const isValidationError = 'type' in err && err.type === APIErrors.VALIDATION
+        const message = isValidationError ? 'Validation Error!' : 'Error!'
+
+        toast.update(toastId, {render: message, type: 'error', isLoading: false, autoClose: 5000})
       }
       dispatch({
         type,
         status: APIConstants.FAILED,
-        error
+        error,
       })
     })
   }

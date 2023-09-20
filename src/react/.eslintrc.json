@@ -17,6 +17,12 @@
         "@typescript-eslint",
         "react"
     ],
+    "ignorePatterns": [
+        "node_modules/",
+        "dist/",
+        "public/",
+        "*.js"
+    ],
     "rules": {
         "indent": [
             "error",
@@ -32,7 +38,7 @@
         ],
         "semi": [
             "error",
-            "always"
+            "never"
         ],
         "no-duplicate-imports": [
             "error",
@@ -41,22 +47,13 @@
             }
         ],
         "no-self-compare": [
-            "error",
-            {
-                "allowComparingFunctions": true
-            }
+            "error"
         ],
         "no-template-curly-in-string": [
             "error"
         ],
         "block-scoped-var": [
             "error"
-        ],
-        "camelcase": [
-            "error",
-            {
-                "properties": "always"
-            }
         ],
         "curly": [
             "error",
@@ -66,9 +63,6 @@
             "error"
         ],
         "default-case-last": [
-            "error"
-        ],
-        "default-param-last": [
             "error"
         ],
         "dot-notation": [
@@ -95,7 +89,7 @@
         ],
         "comma-dangle": [
             "error",
-            "always"
+            "always-multiline"
         ],
         "comma-spacing": [
             "error",
@@ -103,10 +97,6 @@
                 "before": false,
                 "after": true
             }
-        ],
-        "func-call-spacing": [
-            "error",
-            "never"
         ],
         "jsx-quotes": [
             "error",
@@ -180,5 +170,7 @@
             "error",
             "never"
         ],
+        "@typescript-eslint/no-explicit-any": "off",
+        "@typescript-eslint/ban-ts-comment": "off"
     }
 }

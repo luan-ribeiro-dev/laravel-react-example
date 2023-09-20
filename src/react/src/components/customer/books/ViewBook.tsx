@@ -1,11 +1,11 @@
-import React, { useEffect } from 'react'
-import { ConnectedProps, connect } from 'react-redux'
-import { Link, useNavigate, useParams } from 'react-router-dom';
-import { Book, CartItem, getBook, getBooks, setCart } from '../../../api/requests/customer/books';
-import { RootState } from '../../../api/store/reducers';
-import CustomerPanel from '../CustomerPanel';
-import { toast } from 'react-toastify';
-import { toMoney } from '../../../helper';
+import React, {useEffect} from 'react'
+import {ConnectedProps, connect} from 'react-redux'
+import {useNavigate, useParams} from 'react-router-dom'
+import {Book, CartItem, getBook, setCart} from '../../../api/requests/customer/books'
+import {RootState} from '../../../api/store/reducers'
+import CustomerPanel from '../CustomerPanel'
+import {toast} from 'react-toastify'
+import {toMoney} from '../../../helper'
 
 const mapStateToProps = (state: RootState) => ({
   getBookState: state.customer.books.getBook,
@@ -52,7 +52,7 @@ function ViewBook({getBookState, dispatchGetBook, dispatchSetCart}: Props) {
   useEffect(() => {
     dispatchGetBook({id: bookId ? parseInt(bookId) : 0})
   }, [])
-  
+
   useEffect(() => {
     // Get cart from local storage and set it to state
     const cart = localStorage.getItem('cart')
@@ -65,12 +65,12 @@ function ViewBook({getBookState, dispatchGetBook, dispatchSetCart}: Props) {
       breadcrumb={[
         {
           name: 'Books',
-          link: '/books'
+          link: '/books',
         },
         {
           name: book?.title || 'Book info',
-          link: `/books/${book?.id}`
-        }
+          link: `/books/${book?.id}`,
+        },
       ]}
     >
       <div className="row">
@@ -82,18 +82,18 @@ function ViewBook({getBookState, dispatchGetBook, dispatchSetCart}: Props) {
         <div className="col-12 col-sm-8 col-lg-9">
           {/* Book info (title, description, author, publisher, published_at, isbn, genre, language, format, pages, price, stock) */}
           <div className="row">
-              <h1>{book?.title}</h1>
-              <p>{book?.description}</p>
-              <span><strong>Author:</strong> {book?.author}</span>
-              <span><strong>Publisher:</strong> {book?.publisher}</span>
-              <span><strong>Published at:</strong> {book?.published_at}</span>
-              <span><strong>ISBN:</strong> {book?.isbn}</span>
-              <span><strong>Genre:</strong> {book?.genre}</span>
-              <span><strong>Language:</strong> {book?.language}</span>
-              <span><strong>Format:</strong> {book?.format}</span>
-              <span><strong>Pages:</strong> {book?.pages}</span>
-              <span><strong>Price:</strong> {toMoney(book?.price || 0)}</span>
-              <span><strong>Stock:</strong> {book?.stock}</span>
+            <h1>{book?.title}</h1>
+            <p>{book?.description}</p>
+            <span><strong>Author:</strong> {book?.author}</span>
+            <span><strong>Publisher:</strong> {book?.publisher}</span>
+            <span><strong>Published at:</strong> {book?.published_at}</span>
+            <span><strong>ISBN:</strong> {book?.isbn}</span>
+            <span><strong>Genre:</strong> {book?.genre}</span>
+            <span><strong>Language:</strong> {book?.language}</span>
+            <span><strong>Format:</strong> {book?.format}</span>
+            <span><strong>Pages:</strong> {book?.pages}</span>
+            <span><strong>Price:</strong> {toMoney(book?.price || 0)}</span>
+            <span><strong>Stock:</strong> {book?.stock}</span>
           </div>
           {/* Book actions (add to cart, add to wishlist) */}
           <div className="row">

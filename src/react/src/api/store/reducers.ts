@@ -1,8 +1,8 @@
-import { combineReducers } from 'redux'
-import { UsersState, reducers as userReducers } from '../requests/users'
-import { BookState as AdminBookState, reducers as adminBooksReducers } from '../requests/admin/books'
-import { BookState as CustomerBookState, reducers as customerBooksReducers } from '../requests/customer/books'
-import { ReportState, reducers as adminReportReducers } from '../requests/admin/reports'
+import {combineReducers} from 'redux'
+import {UsersState, reducers as userReducers} from '../requests/users'
+import {BookState as AdminBookState, reducers as adminBooksReducers} from '../requests/admin/books'
+import {BookState as CustomerBookState, reducers as customerBooksReducers} from '../requests/customer/books'
+import {ReportState, reducers as adminReportReducers} from '../requests/admin/reports'
 
 export type RootState = {
   users: UsersState
@@ -17,19 +17,19 @@ export type RootState = {
 
 export const reducers = combineReducers({
   users: combineReducers({
-    ...userReducers
+    ...userReducers,
   }),
   admin: combineReducers({
     books: combineReducers({
-      ...adminBooksReducers
+      ...adminBooksReducers,
     }),
     reports: combineReducers({
-      ...adminReportReducers
+      ...adminReportReducers,
     }),
   }),
   customer: combineReducers({
     books: combineReducers({
-      ...customerBooksReducers
-    })
+      ...customerBooksReducers,
+    }),
   }),
 })

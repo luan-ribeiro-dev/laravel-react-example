@@ -1,11 +1,10 @@
-import { ConnectedProps, connect } from 'react-redux'
-import { logoutUser } from '../../api/requests/users'
-import AdminPanel from './AdminPanel';
-import { RootState } from '../../api/store/reducers';
-import { ReportBook, getReports } from '../../api/requests/admin/reports';
-import { useEffect, useState } from 'react';
-import { ChartJSDataset, getChartJSColor, toMoney } from '../../helper';
-import { Line } from 'react-chartjs-2';
+import React, {useEffect, useState} from 'react'
+import {ConnectedProps, connect} from 'react-redux'
+import AdminPanel from './AdminPanel'
+import {RootState} from '../../api/store/reducers'
+import {Report, ReportBook, getReports} from '../../api/requests/admin/reports'
+import {ChartJSDataset, getChartJSColor, toMoney} from '../../helper'
+import {Line} from 'react-chartjs-2'
 import {
   Chart,
   CategoryScale,
@@ -17,12 +16,11 @@ import {
   Legend,
   Point,
   ChartData,
-  Tick,
-} from 'chart.js';
+} from 'chart.js'
 
 function mapStateToProps(state: RootState) {
   return {
-    getReportState: state.admin.reports.getReports
+    getReportState: state.admin.reports.getReports,
   }
 }
 
@@ -43,7 +41,7 @@ function Dashboard({getReportState, dispatchGetReports}: Props) {
   const [last30DaysCustomers, setLast30DaysCustomers] = useState(0)
   const [top10RevenueBooksOfLast30Days, setTop10RevenueBooksOfLast30Days] = useState<ReportBook[]>([])
   const [top10SellerBooksOfLast30Days, setTop10SellerBooksOfLast30Days] = useState<ReportBook[]>([])
-  const [chartData, setChartData] = useState<ChartData<"line", (number | Point | null)[], unknown>>()
+  const [chartData, setChartData] = useState<ChartData<'line', (number | Point | null)[], unknown>>()
 
   Chart.register(
     CategoryScale,
@@ -52,10 +50,10 @@ function Dashboard({getReportState, dispatchGetReports}: Props) {
     LineElement,
     Title,
     Tooltip,
-    Legend
-  );
+    Legend,
+  )
 
-  const getChartData = (salesPerMonth: any): ChartData<"line", (number | Point | null)[], unknown>  => {
+  const getChartData = (salesPerMonth: Report['salesPerMonth']): ChartData<'line', (number | Point | null)[], unknown> => {
     const labels = [
       'January',
       'February',
@@ -68,30 +66,28 @@ function Dashboard({getReportState, dispatchGetReports}: Props) {
       'September',
       'October',
       'November',
-      'December'
+      'December',
     ]
     const datasets: ChartJSDataset[] = []
-    
-    console.log(salesPerMonth)
 
     if (salesPerMonth && Object.keys(salesPerMonth).length > 0) {
       Object.keys(salesPerMonth).forEach((year, index) => {
         datasets.push({
           label: year,
-          data: Object.keys(salesPerMonth[year]).reduce((acc: number[], month) => {
-            acc.push(salesPerMonth[year][month])
+          data: Object.keys(salesPerMonth[parseInt(year)]).reduce((acc: number[], month) => {
+            acc.push(salesPerMonth[parseInt(year)][parseInt(month)])
             return acc
           }, []),
           borderColor: getChartJSColor(index),
           backgroundColor: getChartJSColor(index),
           yAxisID: 'y',
-          hidden: index < Object.keys(salesPerMonth).length - 2
+          hidden: index < Object.keys(salesPerMonth).length - 2,
         })
       })
     }
 
     return {labels, datasets}
-  };
+  }
 
   useEffect(() => {
     dispatchGetReports()
@@ -108,16 +104,14 @@ function Dashboard({getReportState, dispatchGetReports}: Props) {
       setTop10RevenueBooksOfLast30Days(getReportState.data.top10RevenueBooksOfLast30Days)
       setTop10SellerBooksOfLast30Days(getReportState.data.top10SellerBooksOfLast30Days)
       setChartData(getChartData(getReportState.data.salesPerMonth))
-
-      console.log(getChartData(getReportState.data.salesPerMonth))
     }
   }, [getReportState.status])
 
   return (
     <AdminPanel
       breadcrumb={[
-        {name: "Dashboard", link: "/dashboard"},
-        {name: "Reports", link: "/dashboard"},
+        {name: 'Dashboard', link: '/dashboard'},
+        {name: 'Reports', link: '/dashboard'},
       ]}
       title="Geral reports"
     >
@@ -128,7 +122,7 @@ function Dashboard({getReportState, dispatchGetReports}: Props) {
               <div className="row">
                 <div className="col-8">
                   <div className="numbers">
-                    <p className="text-sm mb-0 text-capitalize font-weight-bold">Today's Revenue</p>
+                    <p className="text-sm mb-0 text-capitalize font-weight-bold">Today&apos;s Revenue</p>
                     <h5 className="font-weight-bolder mb-0">
                       {toMoney(todayMoney)}
                     </h5>
@@ -170,7 +164,7 @@ function Dashboard({getReportState, dispatchGetReports}: Props) {
               <div className="row">
                 <div className="col-8">
                   <div className="numbers">
-                    <p className="text-sm mb-0 text-capitalize font-weight-bold">Today's Orders</p>
+                    <p className="text-sm mb-0 text-capitalize font-weight-bold">Today&apos;s Orders</p>
                     <h5 className="font-weight-bolder mb-0">
                       {todayOrders}
                     </h5>
@@ -212,7 +206,7 @@ function Dashboard({getReportState, dispatchGetReports}: Props) {
               <div className="row">
                 <div className="col-8">
                   <div className="numbers">
-                    <p className="text-sm mb-0 text-capitalize font-weight-bold">Today's Customer</p>
+                    <p className="text-sm mb-0 text-capitalize font-weight-bold">Today&apos;s Customer</p>
                     <h5 className="font-weight-bolder mb-0">
                       {todayCustomers}
                     </h5>
@@ -257,7 +251,7 @@ function Dashboard({getReportState, dispatchGetReports}: Props) {
             </div>
             <div className="card-body p-3">
               {chartData && (
-                <Line 
+                <Line
                   options={{
                     responsive: true,
                     interaction: {
@@ -269,12 +263,12 @@ function Dashboard({getReportState, dispatchGetReports}: Props) {
                       y: {
                         beginAtZero: true,
                         ticks: {
-                          callback: (tickValue: string | number, index: number, ticks: Tick[]) => toMoney(typeof tickValue === 'string' ? parseInt(tickValue) : tickValue)
-                        }
-                      }
-                    }
-                  }} 
-                  data={chartData} 
+                          callback: (tickValue: string | number) => toMoney(typeof tickValue === 'string' ? parseInt(tickValue) : tickValue),
+                        },
+                      },
+                    },
+                  }}
+                  data={chartData}
                 />
               )}
             </div>

@@ -57,7 +57,7 @@ class ReportController extends Controller
             }
         }
 
-        $top10SellerBooksOfLast30Days = Book::selectRaw('title, genre, CAST(sum(quantity) AS SIGNED) as totalQuantity, sum(book_invoice.price) as totalRevenue')
+        $top10SellerBooksOfLast30Days = Book::selectRaw('title, genre, CAST(sum(quantity) AS SIGNED) as totalQuantity, sum(invoices.total_price) as totalRevenue')
             ->join('book_invoice', 'book_invoice.book_id', '=', 'books.id')
             ->join('invoices', 'book_invoice.invoice_id', '=', 'invoices.id')
             ->whereRaw('DATE(invoices.created_at) >= ?', [date('Y-m-d', strtotime('-30 days'))])
@@ -66,7 +66,7 @@ class ReportController extends Controller
             ->limit(10)
             ->get();
 
-        $top10RevenueBooksOfLast30Days = Book::selectRaw('title, genre, CAST(sum(quantity) AS SIGNED) as totalQuantity, sum(book_invoice.price) as totalRevenue')
+        $top10RevenueBooksOfLast30Days = Book::selectRaw('title, genre, CAST(sum(quantity) AS SIGNED) as totalQuantity, sum(invoices.total_price) as totalRevenue')
             ->join('book_invoice', 'book_invoice.book_id', '=', 'books.id')
             ->join('invoices', 'book_invoice.invoice_id', '=', 'invoices.id')
             ->whereRaw('DATE(invoices.created_at) >= ?', [date('Y-m-d', strtotime('-30 days'))])

@@ -1,7 +1,7 @@
-import api, { ApiReset, ApiReturn, apiReducer } from "../.."
+import api, {ApiReset, ApiReturn, apiReducer} from '../..'
 
 export enum Constants {
-  GET_DASHBOARD_REPORTS = "@ADMIN/REPORTS/GET_DASHBOARD_REPORTS",
+  GET_DASHBOARD_REPORTS = '@ADMIN/REPORTS/GET_DASHBOARD_REPORTS',
 }
 
 export type ReportBook = {

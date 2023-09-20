@@ -1,9 +1,9 @@
-import React, { useEffect } from 'react'
-import { ConnectedProps, connect } from 'react-redux'
-import { loginUser, quickRegisterAdmin, quickRegisterCustomer } from '../../api/requests/users'
-import { Link } from 'react-router-dom';
-import { toast } from 'react-toastify';
-import { RootState } from '../../api/store/reducers';
+import React, {useEffect} from 'react'
+import {ConnectedProps, connect} from 'react-redux'
+import {loginUser, quickRegisterAdmin, quickRegisterCustomer} from '../../api/requests/users'
+import {Link} from 'react-router-dom'
+import {toast} from 'react-toastify'
+import {RootState} from '../../api/store/reducers'
 
 function mapStateToProps(state: RootState) {
   return {
@@ -39,7 +39,7 @@ function SignIn({loginUserState, quickRegisterCustomerState, quickRegisterAdminS
       dispatchQuickRegisterCustomer()
     }
   }
-  
+
   const handleQuickRegisterAdmin = () => {
     if (quickRegisterCustomerState.unstarted && quickRegisterAdminState.unstarted) {
       dispatchQuickRegisterAdmin()
@@ -50,7 +50,7 @@ function SignIn({loginUserState, quickRegisterCustomerState, quickRegisterAdminS
     if (loginUserState.succeeded) {
       window.location.href = 'dashboard'
     } else if (loginUserState.failed) {
-      toast.error("Email or password is incorrect")
+      toast.error('Email or password is incorrect')
     }
   }, [loginUserState.status])
 
@@ -147,15 +147,15 @@ function SignIn({loginUserState, quickRegisterCustomerState, quickRegisterAdminS
                     </div>
                     <div className="card-footer text-center pt-0 px-lg-2 px-1">
                       <p className="mb-4 text-sm mx-auto">
-                        Don't have an account?
-                        <Link className="text-info text-gradient font-weight-bold ms-1" to={"/sign-up"}>Sign up</Link>
+                        Don&apos;t have an account?
+                        <Link className="text-info text-gradient font-weight-bold ms-1" to={'/sign-up'}>Sign up</Link>
                       </p>
                     </div>
                   </div>
                 </div>
                 <div className="col-md-6">
                   <div className="oblique position-absolute top-0 h-100 d-md-block d-none me-n8">
-                    <div className="oblique-image bg-cover position-absolute fixed-top ms-auto h-100 z-index-0 ms-n6" style={{backgroundImage: "url('../assets/img/curved-images/curved6.jpg')"}}></div>
+                    <div className="oblique-image bg-cover position-absolute fixed-top ms-auto h-100 z-index-0 ms-n6" style={{backgroundImage: 'url(\'../assets/img/curved-images/curved6.jpg\')'}}></div>
                   </div>
                 </div>
               </div>

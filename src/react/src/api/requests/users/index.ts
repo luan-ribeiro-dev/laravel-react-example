@@ -1,12 +1,12 @@
-import api, { ApiReturn, apiReducer } from "../.."
+import api, {ApiReturn, apiReducer} from '../..'
 
 export enum Constants {
-  GET_USER = "@USERS/GET_USER",
-  STORE_USER = "@USERS/STORE_USER",
-  LOGOUT_USER = "@USERS/LOGOUT_USER",
-  LOGIN_USER = "@USERS/LOGIN_USER",
-  QUICK_REGISTER_CUSTOMER = "@USERS/QUICK_REGISTER_CUSTOMER",
-  QUICK_REGISTER_ADMIN = "@USERS/QUICK_REGISTER_ADMIN",
+  GET_USER = '@USERS/GET_USER',
+  STORE_USER = '@USERS/STORE_USER',
+  LOGOUT_USER = '@USERS/LOGOUT_USER',
+  LOGIN_USER = '@USERS/LOGIN_USER',
+  QUICK_REGISTER_CUSTOMER = '@USERS/QUICK_REGISTER_CUSTOMER',
+  QUICK_REGISTER_ADMIN = '@USERS/QUICK_REGISTER_ADMIN',
 
   ADMIN = 'admin',
   CUSTOMER = 'customer',
@@ -21,7 +21,7 @@ export type User = {
 export function getUser() {
   return api(Constants.GET_USER, {
     url: 'users',
-    method: 'GET'
+    method: 'GET',
   })
 }
 
@@ -30,7 +30,7 @@ export function storeUser(name: string, email: string, password: string) {
     url: 'users/register',
     method: 'POST',
     data: {name, email, password},
-    enableToast: true
+    enableToast: true,
   })
 }
 
@@ -41,7 +41,6 @@ export function loginUser(email: string, password: string) {
     data: {email, password},
   })
 }
-
 
 export function logoutUser() {
   return api(Constants.LOGOUT_USER, {
@@ -66,11 +65,11 @@ export function quickRegisterAdmin() {
 
 export type UsersState = {
   getUser: ApiReturn<User>
-  storeUser: ApiReturn<any>
-  logoutUser: ApiReturn<any>
-  loginUser: ApiReturn<any>
-  quickRegisterCustomer: ApiReturn<any>
-  quickRegisterAdmin: ApiReturn<any>
+  storeUser: ApiReturn<boolean>
+  logoutUser: ApiReturn<boolean>
+  loginUser: ApiReturn<boolean>
+  quickRegisterCustomer: ApiReturn<boolean>
+  quickRegisterAdmin: ApiReturn<boolean>
 }
 
 export const reducers = {
