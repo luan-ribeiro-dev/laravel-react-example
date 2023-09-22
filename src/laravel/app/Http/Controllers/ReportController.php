@@ -61,7 +61,7 @@ class ReportController extends Controller
             ->join('book_invoice', 'book_invoice.book_id', '=', 'books.id')
             ->join('invoices', 'book_invoice.invoice_id', '=', 'invoices.id')
             ->whereRaw('DATE(invoices.created_at) >= ?', [date('Y-m-d', strtotime('-30 days'))])
-            ->groupBy('book_id')
+            ->groupBy('book_id', 'title', 'genre')
             ->orderByDesc('totalQuantity')
             ->limit(10)
             ->get();
@@ -70,7 +70,7 @@ class ReportController extends Controller
             ->join('book_invoice', 'book_invoice.book_id', '=', 'books.id')
             ->join('invoices', 'book_invoice.invoice_id', '=', 'invoices.id')
             ->whereRaw('DATE(invoices.created_at) >= ?', [date('Y-m-d', strtotime('-30 days'))])
-            ->groupBy('book_id')
+            ->groupBy('book_id', 'title', 'genre')
             ->orderByDesc('totalRevenue')
             ->limit(10)
             ->get();

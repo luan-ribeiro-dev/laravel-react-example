@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react'
+import {useEffect, useState} from 'react'
 import {ConnectedProps, connect} from 'react-redux'
 import AdminPanel from './AdminPanel'
 import {RootState} from '../../api/store/reducers'

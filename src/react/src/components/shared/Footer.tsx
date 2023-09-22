@@ -1,5 +1,3 @@
-import React from 'react'
-
 const Footer = () => (
   <footer className="footer pt-3  ">
     <div className="container-fluid">

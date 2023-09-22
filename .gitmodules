@@ -1,0 +1,3 @@
+[submodule "src/react/dist"]
+	path = src/react/dist
+	url = git@github.com:luan-ribeiro-dev/bookstoreexampledist.git

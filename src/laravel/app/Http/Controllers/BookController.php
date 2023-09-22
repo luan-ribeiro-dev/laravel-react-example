@@ -13,11 +13,12 @@ class BookController extends Controller
     {
         $user = auth()->user();
         $books = Book::orderBy('created_at', 'desc')
+            ->where('status', 'active')
             ->orderBy('id', 'desc');
 
         if ($user->role === 'customer') {
-            $books->where('stock', '>', 0)
-                ->select('id', 'title', 'author', 'price', 'stock');
+            $books->select('id', 'title', 'author', 'price', 'stock')
+                ->where('stock', '>', 0);
         }
 
         return response()->json($books->paginate(100), 200);
@@ -27,7 +28,14 @@ class BookController extends Controller
     {
         $data = $request->validated();
         
-        Book::create($data);
+        Book::create(
+            array_merge(
+                $data,
+                [
+                    'status' => 'active',
+                ]
+            )
+        );
 
         // Limit of 1000000 books in the database, delete the oldest books
         $count = Book::count();
@@ -50,6 +58,12 @@ class BookController extends Controller
     {
         $book = Book::findOrFail($id);
 
+        if ($book->status === 'deleted') {
+            return response()->json([
+                'message' => 'Book not found',
+            ], 404);
+        }
+
         return response()->json($book, 200);
     }
 
@@ -67,7 +81,10 @@ class BookController extends Controller
 
     public function destroy($id)
     {
-        Book::destroy($id);
+        $book = Book::findOrFail($id);
+
+        $book->status = 'deleted';
+        $book->save();
 
         return response()->json([
             'message' => 'Book deleted successfully',

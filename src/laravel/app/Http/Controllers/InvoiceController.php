@@ -49,6 +49,12 @@ class InvoiceController extends Controller
                     'stock' => $book['stock'],
                 ];
             }, $books));
+
+            foreach ($books as $book) {
+                $bookModel = Book::find($book['id']);
+                $bookModel->stock -= $book['quantity'];
+                $bookModel->save();
+            }
         } catch (\Exception $e) {
             $invoice->delete();
 
